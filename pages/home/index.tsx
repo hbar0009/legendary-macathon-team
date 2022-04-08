@@ -23,7 +23,7 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1 className={styles.title} style={{zIndex: 2}}>
-          Welcome to <a href="#">Atustralia!</a>
+          Welcome to <a href="#">Australia!</a>
         </h1>
 <div>
   
