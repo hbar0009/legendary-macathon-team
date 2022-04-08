@@ -7,8 +7,13 @@ import * as React from 'react';
 
 import Map from 'react-map-gl';
 
+import LoginPage from "./login";
 
 const Home: NextPage = () => {
+  const isLoggedIn = false;
+  if (!isLoggedIn) {
+    return <LoginPage />;
+  }
   return (
     <div className={styles.container}>
       <Head>
@@ -25,9 +30,10 @@ const Home: NextPage = () => {
         <h1 className={styles.title} style={{zIndex: 2}}>
           Welcome to <a href="#">Atustralia!</a>
         </h1>
-<div>
-  
-</div>
+        
+        <p>this page is not exists yet, by right you should get to log in page</p>
+    
+
         <Map
         initialViewState={{
           latitude: -30,
@@ -42,8 +48,8 @@ const Home: NextPage = () => {
 
       </main>
 
-
-    </div>
+</div>
+    
   );
 };
 

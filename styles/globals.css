@@ -2,8 +2,6 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
@@ -13,4 +11,22 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.auth-form {
+  max-width: 400px;
+  padding: 2rem 1rem;
+  margin-bottom: 2rem;
+  border-radius: 25px;
+  box-shadow: 0px 12px 21px 0px rgba(0, 0, 0, 0.2);
+  background: white;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.auth-page {
+  min-height: 50vh;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
 }

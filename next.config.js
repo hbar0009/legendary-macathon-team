@@ -7,3 +7,5 @@ const nextConfig = {
     MAPBOX_TOKEN: process.env.MAPBOX_TOKEN,
   },
 };
+
+module.exports = nextConfig;
