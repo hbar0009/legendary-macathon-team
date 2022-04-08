@@ -3,7 +3,6 @@ import type { NextPage } from "next";
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Container } from "react-bootstrap";
 import Link from "next/link";
 
 const LoginPage: NextPage = () => {
@@ -20,7 +19,7 @@ const LoginPage: NextPage = () => {
 
   return (
     <div className="auth-page">
-      <Container className="auth-form">
+      <div className="auth-form">
         <h3 id="LoginHeading">Log In</h3>
         <hr />
         <Form onSubmit={handleSubmit}>
@@ -51,7 +50,7 @@ const LoginPage: NextPage = () => {
             </Button>
           </Link>
         </Form>
-      </Container>
+      </div>
     </div>
   );
 };
