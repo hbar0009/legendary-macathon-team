@@ -43,7 +43,7 @@ const LoginPage: NextPage = () => {
           </Form.Group>
           <Link href="/home">
             <Button
-              style={{ marginTop: "15px" }}
+              style={{ marginTop: "30px" }}
               type="submit"
               disabled={!validateForm()}
             >
