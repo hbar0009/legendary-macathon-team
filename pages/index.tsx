@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 import Auth from "../components/Auth";
 import { Session } from "@supabase/supabase-js";
+import Home from "./home";
 
-const Home: NextPage = () => {
+const Index: NextPage = () => {
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
@@ -15,7 +16,7 @@ const Home: NextPage = () => {
     });
   }, []);
 
-  return <div>{!session ? <Auth /> : <h1>Login Success 🎉</h1>}</div>;
+  return <div>{!session ? <Auth /> : <Home />}</div>;
 };
 
-export default Home;
+export default Index;
