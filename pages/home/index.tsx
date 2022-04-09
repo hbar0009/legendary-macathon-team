@@ -28,7 +28,7 @@ const Home: NextPage = () => {
     latitude: number;
     longitude: number;
   }
-  const [popupInfo, setPopupInfo] = useState<City>();
+  const [popupInfo, setPopupInfo] = useState<City | null>();
   
   const [viewState, setViewState] = useState({
     latitude: -25,
@@ -136,7 +136,7 @@ const Home: NextPage = () => {
             longitude={Number(popupInfo.longitude)}
             latitude={Number(popupInfo.latitude)}
             closeOnClick={false}
-            onClose={() => setPopupInfo(undefined)}
+            onClose={() => setPopupInfo(null)}
             closeOnMove={false}
             >
               <div>
