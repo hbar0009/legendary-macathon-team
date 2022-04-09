@@ -62,7 +62,7 @@ const Home: NextPage = () => {
               console.log(popupInfo);
                 mapRef.current.flyTo({
                   center: [city.longitude, city.latitude],
-                  zoom: 8,
+                  zoom: 14,
                   speed: 0.8,
                   curve: 1,
                 });
@@ -103,17 +103,7 @@ const Home: NextPage = () => {
           alignItems: "center",
         }}
       >
-        {/* <h1
-          style={{
-            zIndex: "2",
-            background: "white",
-            padding: "5px",
-            opacity: "0.8",
-            borderRadius: "15px",
-          }}
-        >
-          Welcome to <a href="#">Australia!</a>
-        </h1> */}
+       
 
         <Map
           {...viewState}
@@ -129,9 +119,9 @@ const Home: NextPage = () => {
           mapStyle="mapbox://styles/mong00x/cl1qkztx0000m15o5638w9apn"
           mapboxAccessToken={process.env.MAPBOX_TOKEN}
         >
-          <GeolocateControl position="top-left" />
-          <FullscreenControl position="top-left" />
-          <NavigationControl position="top-left" />
+          <GeolocateControl position="bottom-left" />
+          <FullscreenControl position="bottom-left" />
+          <NavigationControl position="bottom-left" />
           <ScaleControl />
 
           {pins}
@@ -145,9 +135,14 @@ const Home: NextPage = () => {
               onClose={() => setPopupInfo(null)}
               closeOnMove={false}
             >
-              <div>
+              <div style={{zIndex:10}}>
+                <p style={{fontSize:"1rem",}}>{popupInfo.date}</p>
                 <h3>{popupInfo.title}</h3>
-                <p>{popupInfo.description}</p>
+                <p style={{fontSize:"1rem",}}>{popupInfo.description}</p>
+                <p style={{fontSize:"1rem", color:"#666"}}>{popupInfo.address}</p>
+                <p style={{fontSize:"1rem", color:"#666"}}>{popupInfo.category}</p>
+                <p style={{fontSize:"1rem", color:"#666"}}>0 attendees</p>
+                <Button>Join</Button>
               </div>
             </Popup>
           )}
@@ -155,7 +150,7 @@ const Home: NextPage = () => {
 
         <Button
           variant="primary"
-          style={{ position: "fixed", bottom: "4rem", zIndex: 1 }}
+          style={{  position:"fixed",left: "0",top:"0",marginTop:"25px",marginLeft:"8rem", zIndex: 2 }}
           onClick={() =>
             console.log(
               navigator.geolocation.getCurrentPosition((position) => {
@@ -226,21 +221,7 @@ const Home: NextPage = () => {
           </Offcanvas.Body>
         </Offcanvas>
 
-        {/* <Map
-          initialViewState={{
-            latitude: -37.85,
-            longitude: 145,
-            zoom: 12,
-          }}
-          style={{
-            width: "100vw",
-            height: "100vh",
-            position: "absolute",
-            zIndex: 1,
-          }}
-          mapStyle="mapbox://styles/mong00x/cl1qkztx0000m15o5638w9apn"
-          mapboxAccessToken={process.env.MAPBOX_TOKEN}
-        /> */}
+
       </main>
     </div>
   );
