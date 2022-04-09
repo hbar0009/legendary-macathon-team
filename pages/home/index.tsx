@@ -1,12 +1,16 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import styles from "../../styles/Home.module.css";
 
-import * as React from "react";
+import React, { useState } from "react";
 
 import Map from "react-map-gl";
+import { Button } from "react-bootstrap";
+import CreateEventModal from "../../components/createEventModal";
 
 const Home: NextPage = () => {
+  const [showCreateEventModal, setShowCreateEventModal] =
+    useState<boolean>(false);
+
   return (
     <div>
       <Head>
@@ -40,7 +44,32 @@ const Home: NextPage = () => {
         >
           Welcome to <a href="#">Australia!</a>
         </h1>
-        <div></div>
+
+        <Button
+          style={{
+            zIndex: "2",
+            background: "white",
+            borderColor: "white",
+            color: "blue",
+            position: "fixed",
+            top: "0",
+            right: "0",
+            marginTop: "25px",
+            marginRight: "30px",
+            fontWeight: "500",
+          }}
+          onClick={() => {
+            setShowCreateEventModal(true);
+          }}
+        >
+          Create Event
+        </Button>
+
+        <CreateEventModal
+          showModal={showCreateEventModal}
+          setShowModal={setShowCreateEventModal}
+        />
+
         <Map
           initialViewState={{
             latitude: -37.85,

@@ -30,3 +30,7 @@ a {
   display: flex;
   align-items: center;
 }
+
+.general-form-group {
+  padding-top: 10px;
+}

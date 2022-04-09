@@ -9,14 +9,14 @@ const CreateEventModal = ({
   setShowModal: Function;
 }) => {
   const eventTitle = "";
-  const eventCategoty = "";
+  const eventCategory = "";
   const eventDescription = "";
   const eventDatetime = "";
   const eventHostInfo = "";
 
   const [eventData, setEventData] = useState({
     eventTitle,
-    eventCategoty,
+    eventCategory,
     eventDescription,
     eventDatetime,
     eventHostInfo,
@@ -27,6 +27,7 @@ const CreateEventModal = ({
     setEventData({ ...eventData, [name]: value });
   };
 
+  // TODO: edit this function to send eventData to backend
   const handleSubmit = () => {
     console.log("Submit button clicked, please pass the data to backend");
     setShowModal(false);
@@ -36,7 +37,9 @@ const CreateEventModal = ({
     <Modal show={showModal}>
       <Modal.Body>
         <Form noValidate onSubmit={handleSubmit}>
-          <p>Create an event</p>
+          <p style={{ fontSize: "larger", fontWeight: "bolder" }}>
+            Create an event
+          </p>
 
           <Form.Group>
             <Form.Label>Event Title</Form.Label>
@@ -44,7 +47,6 @@ const CreateEventModal = ({
               type="text"
               placeholder="Event Title"
               name="eventTitle"
-              defaultValue={eventData.eventTitle}
               onChange={updateInputs}
               required
             />
@@ -55,7 +57,6 @@ const CreateEventModal = ({
             <Form.Control
               type="text"
               placeholder="Event Category"
-              defaultValue={eventData.eventCategoty}
               onChange={updateInputs}
               required
               name="eventCategory"
@@ -67,7 +68,6 @@ const CreateEventModal = ({
             <Form.Control
               type="text"
               placeholder="Event Description"
-              defaultValue={eventData.eventDescription}
               onChange={updateInputs}
               required
               name="eventDescription"
@@ -79,7 +79,6 @@ const CreateEventModal = ({
             <Form.Control
               type="text"
               placeholder="Event Datetime"
-              defaultValue={eventData.eventDatetime}
               onChange={updateInputs}
               required
               name="eventDatetime"
@@ -91,19 +90,22 @@ const CreateEventModal = ({
             <Form.Control
               type="text"
               placeholder="Event Host"
-              defaultValue={eventData.eventHostInfo}
               onChange={updateInputs}
               required
               name="eventHostInfo"
             />
           </Form.Group>
 
-          <div>
-            <Button id="createButton" type="submit">
+          <div style={{ marginTop: "20px" }}>
+            <Button id="createButton" type="submit" style={{ margin: "5px" }}>
               Create Event
             </Button>
 
-            <Button type="button" onClick={() => setShowModal(false)}>
+            <Button
+              type="button"
+              onClick={() => setShowModal(false)}
+              style={{ margin: "5px" }}
+            >
               Discard
             </Button>
           </div>
