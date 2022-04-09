@@ -1,0 +1,44 @@
+.profileImage {
+  width: 10em;
+  height: 10em;
+
+  object-fit: cover;
+  object-position: center top;
+  margin: auto;
+  margin-top: 10px;
+}
+
+.container {
+  width: 25rem;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.listGroup {
+  margin-top: 5px;
+  max-height: 300px;
+  min-height: 300px;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+}
+
+.Body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: auto;
+}
+
+.profileName {
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+
+.noEvents {
+  margin: auto;
+  font-size: 1.5rem;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: grey;
+}
