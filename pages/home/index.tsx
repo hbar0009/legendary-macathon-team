@@ -16,9 +16,10 @@ import Map, {
 import CITIES from "../api/cities.json";
 import Pin from "./pin";
 
-import { Button } from "react-bootstrap";
-import CreateEventModal from "../../components/createEventModal";
+import { Button, Offcanvas } from "react-bootstrap";
 
+import CreateEventModal from "../../components/createEventModal";
+import Profile from "../../components/Profile";
 const Home: NextPage = () => {
   interface City {
     city: string;
@@ -26,7 +27,7 @@ const Home: NextPage = () => {
     latitude: number;
     longitude: number;
   }
-  const [popupInfo, setPopupInfo] = useState<City>();
+  const [popupInfo, setPopupInfo] = useState<City | null>();
 
   const [viewState, setViewState] = useState({
     latitude: -25,
@@ -53,26 +54,25 @@ const Home: NextPage = () => {
         >
           <Pin
             onClick={() => {
-              popupInfo
-                ? () => {
-                    setPopupInfo(city);
-                    mapRef.current.flyTo({
-                      center: [popupInfo.longitude, popupInfo.latitude],
-                      zoom: 8,
-                      speed: 0.8,
-                      curve: 1,
-                    });
-                  }
-                : null;
+              setPopupInfo(city);
+              console.log(popupInfo);
+              popupInfo &&
+                mapRef.current.flyTo({
+                  center: [popupInfo.longitude, popupInfo.latitude],
+                  zoom: 8,
+                  speed: 0.8,
+                  curve: 1,
+                });
             }}
           />
         </Marker>
       )),
-    []
+    [popupInfo]
   );
   const [showCreateEventModal, setShowCreateEventModal] =
     useState<boolean>(false);
 
+  const [showProfile, setShowProfile] = useState<boolean>(false);
   return (
     <div>
       <Head>
@@ -139,7 +139,7 @@ const Home: NextPage = () => {
               longitude={Number(popupInfo.longitude)}
               latitude={Number(popupInfo.latitude)}
               closeOnClick={false}
-              onClose={() => setPopupInfo(undefined)}
+              onClose={() => setPopupInfo(null)}
               closeOnMove={false}
             >
               <div>
@@ -193,6 +193,35 @@ const Home: NextPage = () => {
           showModal={showCreateEventModal}
           setShowModal={setShowCreateEventModal}
         />
+
+        <Button
+          variant="primary"
+          style={{
+            zIndex: "2",
+            background: "white",
+            borderColor: "white",
+            color: "blue",
+            position: "fixed",
+            top: "0",
+            left: "0",
+            marginTop: "25px",
+            marginLeft: "25px",
+            fontWeight: "500",
+          }}
+          onClick={() => {
+            setShowProfile(!showProfile);
+          }}
+        >
+          Profile
+        </Button>
+        <Offcanvas show={showProfile} onHide={() => setShowProfile(false)}>
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <Profile />
+          </Offcanvas.Body>
+        </Offcanvas>
 
         <Map
           initialViewState={{
