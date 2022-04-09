@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, Modal, Col, Row } from "react-bootstrap";
+import { supabase } from "../../utils/supabaseClient";
 
 const CreateEventModal = ({
   showModal,
@@ -11,13 +12,18 @@ const CreateEventModal = ({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [category, setCategory] = useState("");
   const [address, setAddress] = useState("");
   const [postcode, setPostCode] = useState("");
   const [validated, setValidated] = useState(false);
 
-  // TODO: edit this function to send eventData to backend
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  async function updateEvent() {
+    let { data, error, status } = await supabase.from("EVENT").upsert({});
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
@@ -25,6 +31,7 @@ const CreateEventModal = ({
     }
     setValidated(true);
     console.log("Submit button clicked, please pass the data to backend");
+
     setShowModal(false);
   };
 
@@ -66,6 +73,39 @@ const CreateEventModal = ({
               />
             </Col>
           </Form.Group>
+
+          <Row>
+            <Col>
+              <Form.Group as={Row} className="general-form-group">
+                <Form.Label column sm={2}>
+                  Start
+                </Form.Label>
+                <Col>
+                  <Form.Control
+                    required
+                    type="time"
+                    value={startTime}
+                    onChange={(event) => setStartTime(event.target.value)}
+                  />
+                </Col>
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group as={Row} className="general-form-group">
+                <Form.Label column sm={2}>
+                  End
+                </Form.Label>
+                <Col>
+                  <Form.Control
+                    required
+                    type="time"
+                    value={endTime}
+                    onChange={(event) => setEndTime(event.target.value)}
+                  />
+                </Col>
+              </Form.Group>
+            </Col>
+          </Row>
 
           <Form.Group as={Row} className="general-form-group">
             <Form.Label column sm={2}>
@@ -115,7 +155,7 @@ const CreateEventModal = ({
                   <Form.Control
                     required
                     type="text"
-                    placeholder="PostCode"
+                    placeholder="Post Code"
                     value={postcode}
                     onChange={(event) => setPostCode(event.target.value)}
                   />
