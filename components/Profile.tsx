@@ -33,12 +33,12 @@ function EventItem(event: IEvent) {
   );
 }
 
-function ActionEventItem({event, setModalEvent}: {event:IEvent, setModalEvent: (e:IEvent)=> void}){
+function ActionEventItem({event, action}: {event:IEvent, action: (e:IEvent)=> void}){
   return (
     <ListGroupItem
       as="li"
       className="d-flex align-items-start"
-      action onClick={() => setModalEvent(event)}
+      action onClick={() => action(event)}
     >
       <div className="ms-2 me-auto">
         <div className="fw-bold">{event.title}</div>
@@ -55,12 +55,12 @@ const NoEvent = () =>{
 }
 
 
-const MyEventsGroup = ({events, editEventFunction: setModalEvent}: {events:IEvent[], editEventFunction: (e:IEvent)=> void}) => {
+const MyEventsGroup = ({events, action}: {events:IEvent[], action: (e:IEvent)=> void}) => {
   if (events.length > 0) {
     return (
       <ListGroup className={styles.listGroup} as="ol">
         {events.map((item, index) => {
-          return <ActionEventItem key={index} event = {item} setModalEvent={setModalEvent} />;
+          return <ActionEventItem key={index} event = {item} action={action} />;
         })}
         
       </ListGroup>
@@ -87,7 +87,7 @@ function EventsGroup(props: { events: any[] }) {
   }
 }
 
-function Profile({setModalEvent}: {setModalEvent:(e: IEvent)=> void}) {
+function Profile({action}: {action:(e: IEvent)=> void}) {
 
   const currentEvents: IEvent[] = [
     {...undefinedEvent,
@@ -163,7 +163,7 @@ function Profile({setModalEvent}: {setModalEvent:(e: IEvent)=> void}) {
           <EventsGroup events={historicalEvents}  /> 
           </Tab>
           <Tab  eventKey="owned" title="Hosting" className={styles.tab}>
-          <MyEventsGroup events={ownEvents} editEventFunction = {setModalEvent} /> 
+          <MyEventsGroup events={ownEvents} action = {action} /> 
           </Tab>
         </Tabs>
    

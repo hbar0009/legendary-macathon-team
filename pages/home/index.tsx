@@ -226,7 +226,7 @@ const Home: NextPage = () => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Profile
-              setModalEvent={(e: IEvent) => {
+              action={(e: IEvent) => {
                 setModalEvent(e);
                 setShowCreateEventModal(true);
               }}
