@@ -17,7 +17,6 @@ import CITIES from "../api/cities.json";
 import Pin from "./pin";
 
 
-import Map from "react-map-gl";
 import { Button,Offcanvas } from "react-bootstrap";
 
 import CreateEventModal from "../../components/createEventModal";
