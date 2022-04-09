@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Button, Form, Modal, Col, Row } from "react-bootstrap";
-import IEvent, {Category, undefinedEvent} from '../IEvent';
+import { Modal} from "react-bootstrap";
+import IEvent, {undefinedEvent} from '../IEvent';
 import EventForm from '../createEventModal/EventForm'
 const CreateEventModal = ({
   showModal,
@@ -13,9 +13,15 @@ const CreateEventModal = ({
 }) => {
 
   // TODO: edit this function to send eventData to backend
-  const handleSubmit = () => {
+  const handleSubmit = (e:IEvent) => {
     setShowModal(false);
   };
+
+  const handleSave = (e:IEvent) => {
+    setShowModal(false);
+
+  }
+
   const handleClose = () => {
     setShowModal(false);
   }
@@ -41,7 +47,7 @@ const CreateEventModal = ({
            :
            <EventForm 
            passedEvent={event} 
-           handleButton={handleSubmit} 
+           handleButton={handleSave} 
            buttonText={"Save"} 
 
            />
