@@ -21,6 +21,7 @@ function CreateEventForm() {
   const [category, setCategory] = useState("");
   const [address, setAddress] = useState("");
   const [postcode, setPostCode] = useState("");
+  const [validated, setValidated] = useState(false);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget;
@@ -28,11 +29,17 @@ function CreateEventForm() {
       event.preventDefault();
       event.stopPropagation();
     }
+    setValidated(true);
   };
   return (
     <Container className={styles.main}>
       <h1 className="mx-auto mb-4">Create Event</h1>
-      <Form noValidate onSubmit={handleSubmit} className="d-grid gap-5">
+      <Form
+        noValidate
+        validated={validated}
+        onSubmit={handleSubmit}
+        className="d-grid gap-5"
+      >
         <Form.Group as={Row}>
           <Form.Label column sm={2}>
             Title
@@ -56,6 +63,7 @@ function CreateEventForm() {
           </Form.Label>
           <Col>
             <Form.Control
+            required
               type="date"
               value={date}
               onChange={(event) => setDate(event.target.value)}
@@ -69,6 +77,7 @@ function CreateEventForm() {
           </Form.Label>
           <Col>
             <Form.Control
+            required
               as="select"
               value={category}
               onChange={(event) => setCategory(event.target.value)}
@@ -85,8 +94,9 @@ function CreateEventForm() {
               <Form.Label column sm={4}>
                 Address
               </Form.Label>
-              <Col>
+              <Col sm={8}>
                 <Form.Control
+                required
                   type="text"
                   placeholder="Address"
                   name="city"
@@ -94,24 +104,29 @@ function CreateEventForm() {
                   onChange={(event) => setAddress(event.target.value)}
                 />
 
-                <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Address required
+                </Form.Control.Feedback>
               </Col>
             </Form.Group>
           </Col>
           <Col>
             <Form.Group as={Row}>
-              <Form.Label column sm={2}>
+              <Form.Label column sm={3}>
                 Post Code
               </Form.Label>
               <Col>
                 <Form.Control
+                required
                   type="text"
                   placeholder="PostCode"
                   value={postcode}
                   onChange={(event) => setPostCode(event.target.value)}
                 />
 
-                <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">
+                  Required
+                </Form.Control.Feedback>
               </Col>
             </Form.Group>
           </Col>
@@ -123,17 +138,18 @@ function CreateEventForm() {
           </Form.Label>
           <Col>
             <Form.Control
+            required
               as="textarea"
-              value = {description}
+              value={description}
               rows={4}
               onChange={(event) => setDescription(event.target.value)}
             />
           </Col>
         </Form.Group>
+        <Button className="mx-auto mt-4" type="submit">
+          Submit
+        </Button>
       </Form>
-      <Button className="mx-auto mt-4" type="submit">
-        Submit
-      </Button>
     </Container>
   );
 }
