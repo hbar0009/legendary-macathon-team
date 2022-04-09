@@ -16,9 +16,11 @@ import Map, {
 import CITIES from "../api/cities.json";
 import Pin from "./pin";
 
-import { Button } from "react-bootstrap";
-import CreateEventModal from "../../components/createEventModal";
 
+import { Button,Offcanvas } from "react-bootstrap";
+
+import CreateEventModal from "../../components/createEventModal";
+import Profile from "../../components/Profile";
 const Home: NextPage = () => {
   interface City {
     city: string;
@@ -71,6 +73,7 @@ const Home: NextPage = () => {
   const [showCreateEventModal, setShowCreateEventModal] =
     useState<boolean>(false);
 
+  const [showProfile, setShowProfile] = useState<boolean>(false);
   return (
     <div>
       <Head>
@@ -191,6 +194,50 @@ const Home: NextPage = () => {
           showModal={showCreateEventModal}
           setShowModal={setShowCreateEventModal}
         />
+
+      
+        <Button variant="primary" 
+        style={{
+          zIndex: "2",
+          background: "white",
+          borderColor: "white",
+          color: "blue",
+          position: "fixed",
+          top: "0",
+          left: "0",
+          marginTop: "25px",
+          marginLeft: "25px",
+          fontWeight: "500",
+        }}
+        onClick={()=> {setShowProfile(!showProfile)}}>
+        Profile
+        </Button>
+        <Offcanvas show={showProfile} onHide={()=>setShowProfile(false)}>
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+        <Profile />
+        </Offcanvas.Body>
+      </Offcanvas>
+       
+
+        <Map
+          initialViewState={{
+            latitude: -37.85,
+            longitude: 145,
+            zoom: 12,
+          }}
+          style={{
+            width: "100vw",
+            height: "100vh",
+            position: "absolute",
+            zIndex: 1,
+          }}
+          mapStyle="mapbox://styles/mong00x/cl1qkztx0000m15o5638w9apn"
+          mapboxAccessToken={process.env.MAPBOX_TOKEN}
+        />
+
       </main>
     </div>
   );
