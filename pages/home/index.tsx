@@ -23,8 +23,12 @@ import CreateEventModal from "../../components/createEventModal";
 import Profile from "../../components/Profile";
 const Home: NextPage = () => {
   interface City {
-    city: string;
-    population: string;
+    title: string;
+    date: string;
+    category: string;
+    address: string;
+    postcode: string;
+    description: string;
     latitude: number;
     longitude: number;
   }
@@ -57,7 +61,6 @@ const Home: NextPage = () => {
             onClick={() => {
               setPopupInfo(city);
               console.log(popupInfo);
-              popupInfo &&
                 mapRef.current.flyTo({
                   center: [city.longitude, city.latitude],
                   zoom: 8,
@@ -101,7 +104,7 @@ const Home: NextPage = () => {
           alignItems: "center",
         }}
       >
-        <h1
+        {/* <h1
           style={{
             zIndex: "2",
             background: "white",
@@ -111,7 +114,7 @@ const Home: NextPage = () => {
           }}
         >
           Welcome to <a href="#">Australia!</a>
-        </h1>
+        </h1> */}
 
         <Map
           {...viewState}
@@ -144,8 +147,8 @@ const Home: NextPage = () => {
               closeOnMove={false}
             >
               <div>
-                <h3>{popupInfo.city}</h3>
-                <p>Population: {popupInfo.population}</p>
+                <h3>{popupInfo.title}</h3>
+                <p>{popupInfo.description}</p>
               </div>
             </Popup>
           )}
