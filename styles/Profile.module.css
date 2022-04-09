@@ -1,11 +1,10 @@
 .profileImage {
   width: 10em;
   height: 10em;
-
   object-fit: cover;
   object-position: center top;
-  margin: auto;
   margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .container {
@@ -17,21 +16,25 @@
 
 .listGroup {
   margin-top: 5px;
-  max-height: 100%;
-  min-height: 100%;
   width: 100%;
+  max-height: 75vh;
   overflow-y: auto;
 }
 
-.Body {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+.tabs{
+    margin-top:15px;
+    width: 100%;
+}
+.tab{
+    margin-top: 15px;
+    width: 100%;
 }
 
+
 .profileName {
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 15px;
+  font-size: xx-large;
 }
 
 .noEvents {
@@ -40,4 +43,9 @@
   padding-top: 20px;
   padding-bottom: 20px;
   color: grey;
+}
+
+.button{
+    position: fixed;
+    bottom: 10px;
 }
