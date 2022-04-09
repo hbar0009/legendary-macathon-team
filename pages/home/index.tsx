@@ -4,13 +4,14 @@ import Head from "next/head";
 import React, { useState } from "react";
 
 import Map from "react-map-gl";
-import { Button } from "react-bootstrap";
+import { Button,Offcanvas } from "react-bootstrap";
 import CreateEventModal from "../../components/createEventModal";
-
+import Profile from "../../components/Profile";
 const Home: NextPage = () => {
   const [showCreateEventModal, setShowCreateEventModal] =
     useState<boolean>(false);
 
+  const [showProfile, setShowProfile] = useState<boolean>(false);
   return (
     <div>
       <Head>
@@ -69,6 +70,32 @@ const Home: NextPage = () => {
           showModal={showCreateEventModal}
           setShowModal={setShowCreateEventModal}
         />
+      
+        <Button variant="primary" 
+        style={{
+          zIndex: "2",
+          background: "white",
+          borderColor: "white",
+          color: "blue",
+          position: "fixed",
+          top: "0",
+          left: "0",
+          marginTop: "25px",
+          marginLeft: "25px",
+          fontWeight: "500",
+        }}
+        onClick={()=> {setShowProfile(!showProfile)}}>
+        Profile
+        </Button>
+        <Offcanvas show={showProfile} onHide={()=>setShowProfile(false)}>
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+        <Profile />
+        </Offcanvas.Body>
+      </Offcanvas>
+       
 
         <Map
           initialViewState={{

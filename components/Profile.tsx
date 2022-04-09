@@ -15,11 +15,13 @@ interface IEvent {
   going: number;
 }
 
-function EventItem(event: IEvent) {
+function EventItem(event: IEvent, id:number) {
+  
   return (
     <ListGroupItem
       as="li"
       className="d-flex justify-content-between align-items-start"
+      key = {id}
     >
       <div className="ms-2 me-auto">
         <div className="fw-bold">{event.title}</div>
@@ -38,9 +40,12 @@ function EventsGroup(props: { events: any[]; }) {
   if (props.events.length > 0) {
     return (
       <ListGroup className={styles.listGroup} as="ol">
-        {props.events.map((item) => (
-          <EventItem {...item} />
-        ))}
+        {props.events.map((item, index) => {
+           return (<EventItem {...item} id = {index}/>)
+
+        })
+    
+    };
       </ListGroup>
     );
   } else {

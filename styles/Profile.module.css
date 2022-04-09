@@ -9,7 +9,7 @@
 }
 
 .container {
-  width: 25rem;
+  width: 100%;
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -17,17 +17,16 @@
 
 .listGroup {
   margin-top: 5px;
-  max-height: 300px;
-  min-height: 300px;
+  max-height: 100%;
+  min-height: 100%;
+  width: 100%;
   overflow-y: auto;
-  scrollbar-gutter: stable;
 }
 
 .Body {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: auto;
+  width: 100%;
 }
 
 .profileName {
