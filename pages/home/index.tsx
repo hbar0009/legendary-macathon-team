@@ -58,7 +58,7 @@ const Home: NextPage = () => {
               console.log(popupInfo);
               popupInfo &&
                 mapRef.current.flyTo({
-                  center: [popupInfo.longitude, popupInfo.latitude],
+                  center: [city.longitude, city.latitude],
                   zoom: 8,
                   speed: 0.8,
                   curve: 1,
@@ -223,7 +223,7 @@ const Home: NextPage = () => {
           </Offcanvas.Body>
         </Offcanvas>
 
-        <Map
+        {/* <Map
           initialViewState={{
             latitude: -37.85,
             longitude: 145,
@@ -237,7 +237,7 @@ const Home: NextPage = () => {
           }}
           mapStyle="mapbox://styles/mong00x/cl1qkztx0000m15o5638w9apn"
           mapboxAccessToken={process.env.MAPBOX_TOKEN}
-        />
+        /> */}
       </main>
     </div>
   );
