@@ -4,11 +4,30 @@ import Image from "next/image";
 import styles from "../../styles/Home.module.css";
 
 import * as React from 'react';
+import { useState,useMemo } from 'react';
 
-import Map from 'react-map-gl';
+import Map, {
+  Marker,
+  Popup,
+  NavigationControl,
+  FullscreenControl,
+  ScaleControl,
+  GeolocateControl
+} from 'react-map-gl';
 
+import CITIES from '../api/cities.json'
+// import ControlPanel from './control-panel';
+import Pin from './pin';
+
+console.log(CITIES);
 
 const Home: NextPage = () => {
+
+  
+  const [popupInfo, setPopupInfo] = useState<any>({});
+
+ 
+
   return (
     <div className={styles.container}>
       <Head>
@@ -22,23 +41,44 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title} style={{zIndex: 2}}>
-          Welcome to <a href="#">Australia!</a>
-        </h1>
-<div>
-  
-</div>
+
         <Map
         initialViewState={{
-          latitude: -30,
+          latitude: -25,
           longitude: 135,
-          zoom: 3
+          zoom: 4
         }}
         style={{width: '100vw', height: '100vh', position: 'absolute', zIndex: 1}}
         mapStyle="mapbox://styles/mong00x/cl1qkztx0000m15o5638w9apn"
         mapboxAccessToken={process.env.MAPBOX_TOKEN}
-      
-        />
+        >
+          {CITIES.map((city: any) => (
+            <Marker 
+            key={`marker-${city.index}`}
+            latitude={city.latitude} longitude={city.longitude}>
+            <Pin size={20} onClick={() => {
+              setPopupInfo({
+                latitude: city.latitude,
+                longitude: city.longitude,
+                name: 'test',
+                description: 'test description'
+              })
+            }} />
+          </Marker>  
+          ))}
+          
+          
+
+        <GeolocateControl position="top-left" />
+        <FullscreenControl position="top-left" />
+        <NavigationControl position="top-left" />
+        <ScaleControl />
+
+       
+      </Map>
+
+
+
 
       </main>
 
