@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "../../styles/Home.module.css";
 
 import * as React from 'react';
-import { useState,useMemo,useEffect } from 'react';
+import { useState,useMemo,useEffect,useRef } from 'react';
 
 import Map, {
   Marker,
@@ -18,6 +18,7 @@ import Map, {
 import CITIES from '../api/cities.json'
 import Pin from './pin';
 
+import { Button } from 'react-bootstrap';
 
 
 const Home: NextPage = () => {
@@ -28,9 +29,24 @@ const Home: NextPage = () => {
     latitude: number;
     longitude: number;
   }
-
   const [popupInfo, setPopupInfo] = useState<City>();
   
+  const [viewState, setViewState] = useState({
+    latitude: -25,
+    longitude: 135,
+    zoom: 4
+  });
+
+  const mapRef = useRef<any>(null);
+
+  const onMapLoad = React.useCallback(() => {
+    mapRef.current.on('move', () => {
+      console.log(mapRef.current.getMap())
+      // const { latitude, longitude, zoom } = mapRef.current.getState();
+      // setViewState({ latitude, longitude, zoom });
+    });
+  }, []);
+
 
   const pins = useMemo(
     () =>
@@ -47,9 +63,6 @@ const Home: NextPage = () => {
     []
   );
 
-
-
-
   return (
     <div className={styles.container}>
       <Head>
@@ -60,16 +73,20 @@ const Home: NextPage = () => {
             href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css"
             rel="stylesheet"
           />
+          <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+            integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+          />
       </Head>
 
       <main className={styles.main}>
-
-        <Map
-        initialViewState={{
-          latitude: -25,
-          longitude: 135,
-          zoom: 4
-        }}
+        
+        <Map 
+        {...viewState}
+        ref={mapRef}
+        onLoad={onMapLoad}
+        onMove={evt => setViewState(evt.viewState)}
         style={{width: '100vw', height: '100vh', position: 'absolute', zIndex: 1}}
         mapStyle="mapbox://styles/mong00x/cl1qkztx0000m15o5638w9apn"
         mapboxAccessToken={process.env.MAPBOX_TOKEN}
@@ -97,14 +114,20 @@ const Home: NextPage = () => {
               </div>
             </Popup>
           )}
-
-
-       
-
-       
       </Map>
 
+            <Button 
+            variant="primary" 
+            style={{position: 'fixed',bottom:"4rem", zIndex: 1}}
+            onClick={()=> setViewState({
+              latitude: -25,
+              longitude: 135,
+              zoom: 6
+            })}>
 
+            Check events near me!
+
+            </Button>
 
 
       </main>
