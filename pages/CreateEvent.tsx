@@ -1,4 +1,5 @@
 import React from "react";
+import {useState} from "react";
 import { Form, Container, Button, Row, Col } from "react-bootstrap";
 import styles from "../styles/CreateEventForm.module.css";
 
@@ -6,74 +7,60 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 interface User {}
 
-interface NewEvent {
-  Title: string;
-  Description: string;
-  Host: User;
+interface IEvent {
+  title: string;
+  description: string;
+  host: User;
+  category: string;
 }
 
-class CreateEventForm extends React.Component {
-  state = {
-    title: "",
-    description: "",
-    date: "",
-    category: "",
+function CreateEventForm() {
+
+  const [title,  setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const [category, setCategory] = useState("");
+  const [address, setAddress] = useState("");
+  const [postcode, setPostCode] = useState("");
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.preventDefault();
+      event.stopPropagation();
+    };
+
   };
-
-  setTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      title: e.currentTarget.value,
-    });
-  };
-
-  setDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({
-      date: e.currentTarget.value,
-    });
-  };
-
-  setDescription = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    this.setState({
-      description: e.currentTarget.value,
-    });
-  };
-
-  setCategory = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    this.setState({
-      category: e.currentTarget.value,
-    });
-  };
-
-  handleSubmit = () => {};
-  render() {
-    const { title, date, category } = this.state;
-
     return (
-      <Container className={styles.main} >
-          <h1 className="mx-auto mb-4" >Create Event</h1>
-        <Form onSubmit={() => this.handleSubmit} className = "d-grid gap-5">
-          <Form.Group  as={Row}>
+      <Container className={styles.main}>
+        <h1 className="mx-auto mb-4">Create Event</h1>
+        <Form noValidate  onSubmit={handleSubmit} className="d-grid gap-5">
+          <Form.Group as={Row}>
             <Form.Label column sm={2}>
               Title
             </Form.Label>
             <Col sm={10}>
               <Form.Control
+                required
                 value={title}
-                onChange={(event) => this.setTitle(event as any)}
+                onChange={(event) => setTitle(event.target.value)}
                 placeholder="Event title"
               />
+              <Form.Control.Feedback type="invalid">
+                Event title required
+              </Form.Control.Feedback>
             </Col>
           </Form.Group>
-     
-          <Form.Group  as={Row}>
+
+          <Form.Group as={Row}>
             <Form.Label column sm={2}>
               Date
             </Form.Label>
             <Col>
-              <Form.Control type="date" value={date} onChange={this.setDate} />
+              <Form.Control type="date" value={date} onChange={(event)=> setDate(event.target.value)} />
             </Col>
           </Form.Group>
-     
+
           <Form.Group as={Row}>
             <Form.Label column sm={2}>
               Category
@@ -82,7 +69,7 @@ class CreateEventForm extends React.Component {
               <Form.Control
                 as="select"
                 value={category}
-                onChange={this.setCategory}
+                onChange={(event)=> setCategory(event.target.value)}
               >
                 <option>Volunteering</option>
                 <option>Community Event</option>
@@ -90,19 +77,57 @@ class CreateEventForm extends React.Component {
               </Form.Control>
             </Col>
           </Form.Group>
-          <Form.Group  as={Row}>
+          <Row className="mb-3">
+            <Form.Group as={Col} >
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Address"
+                name="city"
+                value={address}
+                onChange={(event) => setAddress(event.target.value)}
+          
+              />
+
+              <Form.Control.Feedback type="invalid">
+              
+              </Form.Control.Feedback>
+            </Form.Group>
+           
+            <Form.Group as={Col} md="3" >
+              <Form.Label>Post Code</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="PostCode"
+                value={postcode}
+                onChange={(event) => setPostCode(event.target.value)}
+              
+              />
+
+              <Form.Control.Feedback type="invalid">
+                  
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Row>
+
+          <Form.Group as={Row}>
             <Form.Label column sm={2}>
               Description
             </Form.Label>
             <Col>
-              <Form.Control as="textarea" rows={4} />
+              <Form.Control as="textarea" rows={4}
+              onChange = {(event) => setDescription(event.target.value)}
+              
+              />
             </Col>
           </Form.Group>
         </Form>
-        <Button  className="mx-auto mt-4"  onClick={this.handleSubmit}>Submit</Button>
+        <Button className="mx-auto mt-4" type="submit">
+          Submit
+        </Button>
       </Container>
     );
   }
-}
+
 
 export default CreateEventForm;
