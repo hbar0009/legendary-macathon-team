@@ -4,7 +4,7 @@ import Image from "next/image";
 import styles from "../../styles/Home.module.css";
 
 import * as React from 'react';
-import { useState,useMemo } from 'react';
+import { useState,useMemo,useEffect } from 'react';
 
 import Map, {
   Marker,
@@ -16,15 +16,20 @@ import Map, {
 } from 'react-map-gl';
 
 import CITIES from '../api/cities.json'
-// import ControlPanel from './control-panel';
 import Pin from './pin';
 
-console.log(CITIES);
+
 
 const Home: NextPage = () => {
 
-  
-  const [popupInfo, setPopupInfo] = useState();
+  interface City {
+    city: string;
+    population: string;
+    latitude: number;
+    longitude: number;
+  }
+
+  const [popupInfo, setPopupInfo] = useState<City>();
   
 
   const pins = useMemo(
@@ -36,11 +41,13 @@ const Home: NextPage = () => {
           latitude={city.latitude}
           anchor="bottom"
         >
-          <Pin onClick={() => setPopupInfo(city)} />
+          <Pin onClick={() => {setPopupInfo(city)}} />
         </Marker>
       )),
     []
   );
+
+
 
 
   return (
@@ -68,17 +75,22 @@ const Home: NextPage = () => {
         mapboxAccessToken={process.env.MAPBOX_TOKEN}
         >
 
+        <GeolocateControl  position="top-left" />
+        <FullscreenControl position="top-left" />
+        <NavigationControl position="top-left" />
+        <ScaleControl />
+
           {pins}
 
-          {popupInfo && (
+          {popupInfo  && (
             <Popup
             anchor="top"
             longitude={Number(popupInfo.longitude)}
             latitude={Number(popupInfo.latitude)}
             closeOnClick={false}
-            onClose={() => setPopupInfo(null)}>
-
-            
+            onClose={() => setPopupInfo(undefined)}
+            closeOnMove={false}
+            >
               <div>
                 <h3>{popupInfo.city}</h3>
                 <p>Population: {popupInfo.population}</p>
@@ -86,10 +98,8 @@ const Home: NextPage = () => {
             </Popup>
           )}
 
-        <GeolocateControl position="top-left" />
-        <FullscreenControl position="top-left" />
-        <NavigationControl position="top-left" />
-        <ScaleControl />
+
+       
 
        
       </Map>
