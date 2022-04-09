@@ -97,13 +97,12 @@ const EventForm = (
             </Form.Control>
           </Col>
         </Form.Group>
-        <Row>
-          <Col>
+     
             <Form.Group as={Row} className="general-form-group">
-              <Form.Label column sm={4}>
+              <Form.Label column sm={2}>
                 Address
               </Form.Label>
-              <Col sm={8}>
+              <Col >
                 <Form.Control
                   required
                   type="text"
@@ -118,11 +117,10 @@ const EventForm = (
                 </Form.Control.Feedback>
               </Col>
             </Form.Group>
-          </Col>
-          <Col>
+     
             <Form.Group as={Row} className="general-form-group">
-              <Form.Label column sm={4}>
-                Post Code
+              <Form.Label column sm={2}>
+                Zip
               </Form.Label>
               <Col>
                 <Form.Control
@@ -138,14 +136,13 @@ const EventForm = (
                 </Form.Control.Feedback>
               </Col>
             </Form.Group>
-          </Col>
-        </Row>
+     
 
         <Form.Group as={Row} className="general-form-group">
-          <Form.Label column sm={2}>
+          <Form.Label >
             Description
           </Form.Label>
-          <Col>
+          
             <Form.Control
               required
               as="textarea"
@@ -153,7 +150,7 @@ const EventForm = (
               rows={4}
               onChange={(event) => setDescription(event.target.value)}
             />
-          </Col>
+       
         </Form.Group>
         <div style={{ marginTop: "20px" }}>
           <Button id="createButton" type="submit" style={{ margin: "5px" }}>
