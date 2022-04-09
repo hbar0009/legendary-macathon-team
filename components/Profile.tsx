@@ -41,7 +41,7 @@ function EventsGroup(props: { events: any[]; }) {
     return (
       <ListGroup className={styles.listGroup} as="ol">
         {props.events.map((item, index) => {
-           return (<EventItem {...item} id = {index}/>)
+           return (<EventItem EventItem key={index} {...item} />)
         })
     };
       </ListGroup>
