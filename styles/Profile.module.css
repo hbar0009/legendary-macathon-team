@@ -40,8 +40,7 @@
 .noEvents {
   margin: auto;
   font-size: 1.5rem;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding:15px;
   color: grey;
 }
 

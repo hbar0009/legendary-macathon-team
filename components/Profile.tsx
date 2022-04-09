@@ -12,17 +12,9 @@ import {
 import Image from "react-bootstrap/Image";
 import styles from "../styles/Profile.module.css";
 
-enum Category {
-  Community = "Community",
-  Meetup = "Meet up",
-  Volunteering = "Volunteering",
-}
+import IEvent, {Category, undefinedEvent} from '../components/IEvent'
+import CreateEventModal from '../components/createEventModal/index'
 
-interface IEvent {
-  title: string;
-  category: Category;
-  going: number;
-}
 
 function EventItem(event: IEvent) {
   return (
@@ -41,6 +33,45 @@ function EventItem(event: IEvent) {
   );
 }
 
+function ActionEventItem({event, setModalEvent}: {event:IEvent, setModalEvent: (e:IEvent)=> void}){
+  return (
+    <ListGroupItem
+      as="li"
+      className="d-flex align-items-start"
+      action onClick={() => setModalEvent(event)}
+    >
+      <div className="ms-2 me-auto">
+        <div className="fw-bold">{event.title}</div>
+        {event.category}
+      </div>
+      <Badge bg="primary" pill>
+        {event.going}
+      </Badge>
+    </ListGroupItem>
+  );
+}
+const NoEvent = () =>{
+  return <Card.Text className={styles.noEvents}>No events</Card.Text>;
+}
+
+
+const MyEventsGroup = ({events, editEventFunction: setModalEvent}: {events:IEvent[], editEventFunction: (e:IEvent)=> void}) => {
+  if (events.length > 0) {
+    return (
+      <ListGroup className={styles.listGroup} as="ol">
+        {events.map((item, index) => {
+          return <ActionEventItem key={index} event = {item} setModalEvent={setModalEvent} />;
+        })}
+        
+      </ListGroup>
+    );
+  } else {
+    return <NoEvent/>
+  }
+
+}
+
+
 function EventsGroup(props: { events: any[] }) {
   if (props.events.length > 0) {
     return (
@@ -52,43 +83,59 @@ function EventsGroup(props: { events: any[] }) {
       </ListGroup>
     );
   } else {
-    return <Card.Text className={styles.noEvents}>No current events</Card.Text>;
+    return <NoEvent/>
   }
 }
 
-function Profile() {
+function Profile({setModalEvent}: {setModalEvent:(e: IEvent)=> void}) {
+
   const currentEvents: IEvent[] = [
-    {
+    {...undefinedEvent,
       title: "Aged care volunteering",
       category: Category.Volunteering,
       going: 8,
     },
-    {
+    {...undefinedEvent,
       title: "Food distribution volunteering",
       category: Category.Volunteering,
       going: 25,
     },
-    { title: "Anti-war rally", category: Category.Community, going: 652 },
+    { ...undefinedEvent,
+      title: "Anti-war rally", category: Category.Community, going: 652 },
   ];
 
+  const ownEvents :IEvent[] =[
+    {...undefinedEvent,
+      title: "Gamers meetup",
+      category: Category.Meetup,
+      description:"",
+      going: 17,
+
+    }
+  ]
+
+
   const historicalEvents: IEvent[] = [
-    {
+    {...undefinedEvent,
       title: "Elderly pickup",
       category: Category.Volunteering,
+      description:"",
       going: 10,
     },
-    {
+    {...undefinedEvent,
       title: "Student guide",
       category: Category.Volunteering,
+      description:"",
       going: 7,
     },
-    {
+    {...undefinedEvent,
       title: "Food  volunteering",
       category: Category.Volunteering,
+      description:"",
       going: 10,
     },
-    { title: "Cycle meetup", category: Category.Meetup, going: 22 },
-    { title: "Anti-Lockdown rally", category: Category.Community, going: 500 },
+    { ...undefinedEvent, title: "Cycle meetup", category: Category.Meetup,  description:"", going: 22 },
+    {...undefinedEvent, title: "Anti-Lockdown rally", category: Category.Community,  description:"", going: 500 },
   ];
   const name = "John Smith";
   const email = "John.smith@gmail.com";
@@ -114,6 +161,9 @@ function Profile() {
           </Tab>
           <Tab eventKey="history" title="History" className={styles.tab}>
           <EventsGroup events={historicalEvents}  /> 
+          </Tab>
+          <Tab  eventKey="owned" title="Hosting" className={styles.tab}>
+          <MyEventsGroup events={ownEvents} editEventFunction = {setModalEvent} /> 
           </Tab>
         </Tabs>
    

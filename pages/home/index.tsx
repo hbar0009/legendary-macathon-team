@@ -20,6 +20,8 @@ import { Button, Offcanvas } from "react-bootstrap";
 
 import CreateEventModal from "../../components/createEventModal";
 import Profile from "../../components/Profile";
+import IEvent, { undefinedEvent } from "../../components/IEvent";
+
 const Home: NextPage = () => {
   interface City {
     title: string;
@@ -60,6 +62,7 @@ const Home: NextPage = () => {
             onClick={() => {
               setPopupInfo(city);
               console.log(popupInfo);
+              city &&
                 mapRef.current.flyTo({
                   center: [city.longitude, city.latitude],
                   zoom: 14,
@@ -75,7 +78,10 @@ const Home: NextPage = () => {
   const [showCreateEventModal, setShowCreateEventModal] =
     useState<boolean>(false);
 
+  const [modalEvent, setModalEvent] = useState<IEvent | null>(undefinedEvent);
+
   const [showProfile, setShowProfile] = useState<boolean>(false);
+
   return (
     <div>
       <Head>
@@ -181,6 +187,7 @@ const Home: NextPage = () => {
             fontWeight: "500",
           }}
           onClick={() => {
+            setModalEvent(null);
             setShowCreateEventModal(true);
           }}
         >
@@ -190,6 +197,7 @@ const Home: NextPage = () => {
         <CreateEventModal
           showModal={showCreateEventModal}
           setShowModal={setShowCreateEventModal}
+          event={modalEvent}
         />
 
         <Button
@@ -214,10 +222,15 @@ const Home: NextPage = () => {
         </Button>
         <Offcanvas show={showProfile} onHide={() => setShowProfile(false)}>
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+            <Offcanvas.Title>Profile</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Profile />
+            <Profile
+              setModalEvent={(e: IEvent) => {
+                setModalEvent(e);
+                setShowCreateEventModal(true);
+              }}
+            />
           </Offcanvas.Body>
         </Offcanvas>
 

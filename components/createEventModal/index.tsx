@@ -1,163 +1,59 @@
 import React, { useState } from "react";
 import { Button, Form, Modal, Col, Row } from "react-bootstrap";
-
+import IEvent, {Category, undefinedEvent} from '../IEvent';
+import EventForm from '../createEventModal/EventForm'
 const CreateEventModal = ({
   showModal,
   setShowModal,
+  event ,
 }: {
   showModal: boolean;
   setShowModal: Function;
+  event:IEvent|null;
 }) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
-  const [category, setCategory] = useState("");
-  const [address, setAddress] = useState("");
-  const [postcode, setPostCode] = useState("");
-  const [validated, setValidated] = useState(false);
 
   // TODO: edit this function to send eventData to backend
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    setValidated(true);
-    console.log("Submit button clicked, please pass the data to backend");
+  const handleSubmit = () => {
     setShowModal(false);
   };
+  const handleClose = () => {
+    setShowModal(false);
+  }
 
   return (
-    <Modal show={showModal}>
+    <Modal show={showModal} onHide={handleClose}>
+      <Modal.Header closeButton>
+    <Modal.Title>
+      {event === null ?
+        "Create Event" : "Edit Event"
+    }
+
+    </Modal.Title>
+  </Modal.Header>
+
       <Modal.Body>
-        <Form noValidate validated={validated} onSubmit={handleSubmit}>
-          <p style={{ fontSize: "larger", fontWeight: "bolder" }}>
-            Create an event
-          </p>
+        {event == null ?
+           <EventForm 
+           passedEvent={undefinedEvent} 
+           handleButton={handleSubmit} 
+           buttonText={"Submit"} 
+           />
+           :
+           <EventForm 
+           passedEvent={event} 
+           handleButton={handleSubmit} 
+           buttonText={"Save"} 
 
-          <Form.Group as={Row} className="general-form-group">
-            <Form.Label column sm={2}>
-              Title
-            </Form.Label>
-            <Col>
-              <Form.Control
-                required
-                value={title}
-                onChange={(event) => setTitle(event.target.value)}
-                placeholder="Event title"
-              />
-              <Form.Control.Feedback type="invalid">
-                Event title required
-              </Form.Control.Feedback>
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} className="general-form-group">
-            <Form.Label column sm={2}>
-              Date
-            </Form.Label>
-            <Col>
-              <Form.Control
-                required
-                type="date"
-                value={date}
-                onChange={(event) => setDate(event.target.value)}
-              />
-            </Col>
-          </Form.Group>
-
-          <Form.Group as={Row} className="general-form-group">
-            <Form.Label column sm={2}>
-              Category
-            </Form.Label>
-            <Col>
-              <Form.Control
-                required
-                as="select"
-                value={category}
-                onChange={(event) => setCategory(event.target.value)}
-              >
-                <option>Volunteering</option>
-                <option>Community Event</option>
-                <option>Local Meetup</option>
-              </Form.Control>
-            </Col>
-          </Form.Group>
-          <Row>
-            <Col>
-              <Form.Group as={Row} className="general-form-group">
-                <Form.Label column sm={4}>
-                  Address
-                </Form.Label>
-                <Col sm={8}>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="Address"
-                    name="city"
-                    value={address}
-                    onChange={(event) => setAddress(event.target.value)}
-                  />
-
-                  <Form.Control.Feedback type="invalid">
-                    Address required
-                  </Form.Control.Feedback>
-                </Col>
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group as={Row} className="general-form-group">
-                <Form.Label column sm={3}>
-                  Post Code
-                </Form.Label>
-                <Col>
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="PostCode"
-                    value={postcode}
-                    onChange={(event) => setPostCode(event.target.value)}
-                  />
-
-                  <Form.Control.Feedback type="invalid">
-                    Required
-                  </Form.Control.Feedback>
-                </Col>
-              </Form.Group>
-            </Col>
-          </Row>
-
-          <Form.Group as={Row} className="general-form-group">
-            <Form.Label column sm={2}>
-              Description
-            </Form.Label>
-            <Col>
-              <Form.Control
-                required
-                as="textarea"
-                value={description}
-                rows={4}
-                onChange={(event) => setDescription(event.target.value)}
-              />
-            </Col>
-          </Form.Group>
-          <div style={{ marginTop: "20px" }}>
-            <Button id="createButton" type="submit" style={{ margin: "5px" }}>
-              Create Event
-            </Button>
-
-            <Button
-              type="button"
-              onClick={() => setShowModal(false)}
-              style={{ margin: "5px" }}
-            >
-              Discard
-            </Button>
-          </div>
-        </Form>
+           />
+      }
+       
       </Modal.Body>
+     
     </Modal>
   );
 };
+
+
+
+
 export default CreateEventModal;
