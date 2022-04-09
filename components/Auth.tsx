@@ -68,7 +68,7 @@ export default function Auth() {
           type="submit"
           disabled={!validateForm()}
         >
-          Login
+          <span>{loading ? "Loading..." : "Login"}</span>
         </Button>
       </Form>
     </div>
