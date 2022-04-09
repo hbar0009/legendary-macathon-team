@@ -57,7 +57,17 @@ const Home: NextPage = () => {
           latitude={city.latitude}
           anchor="bottom"
         >
-          <Pin onClick={() => {setPopupInfo(city)}} />
+          <Pin onClick={()=> 
+             { 
+              setPopupInfo(city);
+               mapRef.current.flyTo({
+                center: [popupInfo.longitude, popupInfo.latitude],
+                zoom: 8,
+                speed: 0.8,
+                curve: 1,
+              })}
+
+            } />
         </Marker>
       )),
     []
@@ -119,12 +129,8 @@ const Home: NextPage = () => {
             <Button 
             variant="primary" 
             style={{position: 'fixed',bottom:"4rem", zIndex: 1}}
-            onClick={()=> setViewState({
-              latitude: -25,
-              longitude: 135,
-              zoom: 6
-            })}>
-
+            onClick={()=> null}
+            >
             Check events near me!
 
             </Button>
