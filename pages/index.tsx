@@ -5,9 +5,11 @@ import LoginPage from "./login";
 
 const Home: NextPage = () => {
   const isLoggedIn = false;
+  
   if (!isLoggedIn) {
     return <LoginPage />;
   }
+
   return (
 
     <div>

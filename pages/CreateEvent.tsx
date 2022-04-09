@@ -31,6 +31,8 @@ function CreateEventForm() {
     }
     setValidated(true);
   };
+
+  
   return (
     <Container className={styles.main}>
       <h1 className="mx-auto mb-4">Create Event</h1>
