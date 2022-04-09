@@ -24,9 +24,24 @@ console.log(CITIES);
 const Home: NextPage = () => {
 
   
-  const [popupInfo, setPopupInfo] = useState<any>({});
+  const [popupInfo, setPopupInfo] = useState();
+  
 
- 
+  const pins = useMemo(
+    () =>
+      CITIES.map((city, index) => (
+        <Marker
+          key={`marker-${index}`}
+          longitude={city.longitude}
+          latitude={city.latitude}
+          anchor="bottom"
+        >
+          <Pin onClick={() => setPopupInfo(city)} />
+        </Marker>
+      )),
+    []
+  );
+
 
   return (
     <div className={styles.container}>
@@ -52,22 +67,24 @@ const Home: NextPage = () => {
         mapStyle="mapbox://styles/mong00x/cl1qkztx0000m15o5638w9apn"
         mapboxAccessToken={process.env.MAPBOX_TOKEN}
         >
-          {CITIES.map((city: any) => (
-            <Marker 
-            key={`marker-${city.index}`}
-            latitude={city.latitude} longitude={city.longitude}>
-            <Pin size={20} onClick={() => {
-              setPopupInfo({
-                latitude: city.latitude,
-                longitude: city.longitude,
-                name: 'test',
-                description: 'test description'
-              })
-            }} />
-          </Marker>  
-          ))}
-          
-          
+
+          {pins}
+
+          {popupInfo && (
+            <Popup
+            anchor="top"
+            longitude={Number(popupInfo.longitude)}
+            latitude={Number(popupInfo.latitude)}
+            closeOnClick={false}
+            onClose={() => setPopupInfo(null)}>
+
+            
+              <div>
+                <h3>{popupInfo.city}</h3>
+                <p>Population: {popupInfo.population}</p>
+              </div>
+            </Popup>
+          )}
 
         <GeolocateControl position="top-left" />
         <FullscreenControl position="top-left" />
