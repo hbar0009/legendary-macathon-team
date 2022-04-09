@@ -17,7 +17,6 @@ import Map, {
 import CITIES from '../api/cities.json'
 import Pin from './pin';
 
-import Map from "react-map-gl";
 import { Button } from "react-bootstrap";
 import CreateEventModal from "../../components/createEventModal";
 
@@ -55,20 +54,18 @@ const Home: NextPage = () => {
           latitude={city.latitude}
           anchor="bottom"
         >
-          <Pin onClick={()=> 
-             { popupInfo ? ()=>{
+          <Pin onClick={()=> {
                setPopupInfo(city);
-              mapRef.current.flyTo({
+               console.log(popupInfo);
+               popupInfo && mapRef.current.flyTo({
+           
                center: [popupInfo.longitude, popupInfo.latitude],
                zoom: 8,
                speed: 0.8,
                curve: 1,
-             })}
-             : 
-             null
-              }
+              });
+            }} />
 
-            } />
         </Marker>
       )),
     []
@@ -193,21 +190,7 @@ const Home: NextPage = () => {
           setShowModal={setShowCreateEventModal}
         />
 
-        <Map
-          initialViewState={{
-            latitude: -37.85,
-            longitude: 145,
-            zoom: 12,
-          }}
-          style={{
-            width: "100vw",
-            height: "100vh",
-            position: "absolute",
-            zIndex: 1,
-          }}
-          mapStyle="mapbox://styles/mong00x/cl1qkztx0000m15o5638w9apn"
-          mapboxAccessToken={process.env.MAPBOX_TOKEN}
-        />
+       
       </main>
     </div>
   );
