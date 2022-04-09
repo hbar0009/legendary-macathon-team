@@ -56,14 +56,17 @@ const Home: NextPage = () => {
           anchor="bottom"
         >
           <Pin onClick={()=> 
-             { 
-              setPopupInfo(city);
-               mapRef.current.flyTo({
-                center: [popupInfo.longitude, popupInfo.latitude],
-                zoom: 8,
-                speed: 0.8,
-                curve: 1,
-              })}
+             { popupInfo ? ()=>{
+               setPopupInfo(city);
+              mapRef.current.flyTo({
+               center: [popupInfo.longitude, popupInfo.latitude],
+               zoom: 8,
+               speed: 0.8,
+               curve: 1,
+             })}
+             : 
+             null
+              }
 
             } />
         </Marker>
