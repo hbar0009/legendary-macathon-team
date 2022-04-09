@@ -41,9 +41,7 @@ const Home: NextPage = () => {
 
   const onMapLoad = React.useCallback(() => {
     mapRef.current.on('move', () => {
-      console.log(mapRef.current.getMap())
-      // const { latitude, longitude, zoom } = mapRef.current.getState();
-      // setViewState({ latitude, longitude, zoom });
+      // do something when move
     });
   }, []);
 
@@ -129,7 +127,16 @@ const Home: NextPage = () => {
             <Button 
             variant="primary" 
             style={{position: 'fixed',bottom:"4rem", zIndex: 1}}
-            onClick={()=> null}
+            onClick={()=> console.log(navigator.geolocation.getCurrentPosition((position)=>{
+              mapRef.current.flyTo({
+                center: [position.coords.longitude, position.coords.latitude],
+                zoom: 14,
+                speed: 0.8,
+                curve: 1,
+            }
+            )
+            }
+            ))}
             >
             Check events near me!
 
