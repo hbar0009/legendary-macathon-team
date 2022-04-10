@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 import * as React from "react";
 import { useState, useMemo, useRef } from "react";
@@ -29,6 +30,7 @@ const Home = ({ username }: HomeProp) => {
   // console.log(session);
   // console.log(session.user.email);
   // const username = session?.user?.email;
+  const router = useRouter();
 
   interface City {
     title: string;
@@ -201,7 +203,13 @@ const Home = ({ username }: HomeProp) => {
                     popupInfo.maxParticipants ? (
                       <Button disabled>Max participants reached</Button>
                     ) : (
-                      <Button>Join</Button>
+                      <Button
+                        onClick={() => {
+                          popupInfo.participants.push(username);
+                        }}
+                      >
+                        Join
+                      </Button>
                     )}
                   </>
                 )}
