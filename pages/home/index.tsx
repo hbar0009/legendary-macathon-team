@@ -149,11 +149,10 @@ const Home: NextPage = () => {
             position: "absolute",
             zIndex: 1,
           }}
-          mapStyle="mapbox://styles/mong00x/cl1qkztx0000m15o5638w9apn"
+          mapStyle="mapbox://styles/mong00x/cl1syqu5o003515mquddi3wzr"
           mapboxAccessToken={process.env.MAPBOX_TOKEN}
         >
           <GeolocateControl position="bottom-right" />
-          <FullscreenControl position="bottom-right" />
           <NavigationControl position="bottom-right" />
 
           {pins}
@@ -214,11 +213,11 @@ const Home: NextPage = () => {
             borderColor: "white",
             color: "blue",
             position: "fixed",
-            top: "0",
-            right: "0",
-            marginTop: "25px",
-            marginRight: "30px",
+            top: "25px",
+            right: "30px",
             fontWeight: "500",
+          boxShadow:"0px 4px 10px 0px rgba(0,0,0,0.25)",
+
           }}
           onClick={() => {
             setShowCreateEventModal(true);
@@ -248,15 +247,20 @@ const Home: NextPage = () => {
             position: "fixed",
             top: "0",
             left: "0",
+            borderRadius: "50px",
+            width:"3rem",
+            height:"3rem",
             marginTop: "25px",
-            marginLeft: "25px",
+            marginLeft: "30px",
             fontWeight: "500",
+            boxShadow:"0px 4px 10px 0px rgba(0,0,0,0.25)",
+
           }}
           onClick={() => {
             setShowProfile(!showProfile);
           }}
         >
-          Profile
+          <svg style={{width:"2.5rem",position:"absolute",right:"3px", bottom:"3px" }} xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 512 512"><title>Person Circle</title><path d="M258.9 48C141.92 46.42 46.42 141.92 48 258.9c1.56 112.19 92.91 203.54 205.1 205.1 117 1.6 212.48-93.9 210.88-210.88C462.44 140.91 371.09 49.56 258.9 48zm126.42 327.25a4 4 0 01-6.14-.32 124.27 124.27 0 00-32.35-29.59C321.37 329 289.11 320 256 320s-65.37 9-90.83 25.34a124.24 124.24 0 00-32.35 29.58 4 4 0 01-6.14.32A175.32 175.32 0 0180 259c-1.63-97.31 78.22-178.76 175.57-179S432 158.81 432 256a175.32 175.32 0 01-46.68 119.25z"/><path d="M256 144c-19.72 0-37.55 7.39-50.22 20.82s-19 32-17.57 51.93C191.11 256 221.52 288 256 288s64.83-32 67.79-71.24c1.48-19.74-4.8-38.14-17.68-51.82C293.39 151.44 275.59 144 256 144z"/></svg>
         </Button>
         <Offcanvas show={showProfile} onHide={() => setShowProfile(false)}>
           <Offcanvas.Header closeButton>
@@ -277,7 +281,7 @@ const Home: NextPage = () => {
           flexDirection:"column",
           position:"fixed",
           zIndex:2,
-          width:"25%",
+          maxWidth:"380px",
           maxHeight:"460px",
           top:"100px",
           left:"30px",
@@ -323,12 +327,7 @@ const Home: NextPage = () => {
           style={{
             position: "relative",
             margin:"12px",
-            
-            // left: "0",
-            // top: "0",
-            // marginTop: "25px",
-            // marginLeft: "8rem",
-            // zIndex: 2,
+
           }}
           onClick={() =>
               navigator.geolocation.getCurrentPosition((position) => {
