@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Modal, ModalProps, Row } from "react-bootstrap";
+import { Modal, ModalProps } from "react-bootstrap";
 import { Omit, BsPrefixProps } from "react-bootstrap/esm/helpers";
 import orgImgPlaceholder from "./organisation_placeholder.jpg";
 import Image from "next/image";

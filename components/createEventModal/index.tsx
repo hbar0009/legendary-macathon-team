@@ -5,9 +5,12 @@ import EventForm from "../createEventModal/EventForm";
 import { Modal } from "react-bootstrap";
 import { supabase } from "../../utils/supabaseClient";
 import IEvent, { undefinedEvent } from "../../components/IEvent";
+
 import getEventType from "../../utils/getEventType";
 import getHostId from "../../utils/getHostId";
 import { definitions } from "../../types/supabase";
+
+
 
 const CreateEventModal = ({
   showModal,
@@ -20,6 +23,10 @@ const CreateEventModal = ({
 
   const handleSubmit = async (event: IEvent) => {
     setLoading(true);
+
+    setShowModal(false);
+    console.log("Submit button clicked, please pass the data to backend");
+
 
     await createEvent(event);
 
@@ -36,6 +43,7 @@ const CreateEventModal = ({
       const host_id = await getHostId();
 
       // insert into the database
+
       let { data, error, status } = await supabase
         .from<definitions["EVENT"]>("EVENT")
         .insert({
@@ -52,6 +60,7 @@ const CreateEventModal = ({
           et_id: et_id,
           event_host: host_id,
         });
+
 
       if (error) throw error;
 
