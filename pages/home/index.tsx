@@ -300,10 +300,8 @@ const Home: NextPage = () => {
           variant="primary"
           style={{
             position: "relative",
-            marginTop:"44px",
-            marginLeft:"auto",
-            marginRight:"auto",
-            marginBottom:"24px",
+            margin:"12px",
+            
             // left: "0",
             // top: "0",
             // marginTop: "25px",
