@@ -10,7 +10,9 @@ import Map, {
   NavigationControl,
   FullscreenControl,
   GeolocateControl,
+  
 } from "react-map-gl";
+import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css'
 
 import Data from "../api/cities.json";
 import Pin from "./pin";

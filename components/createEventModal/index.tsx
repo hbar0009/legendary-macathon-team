@@ -4,11 +4,14 @@ import EventForm from "../createEventModal/EventForm";
 
 import { Modal } from "react-bootstrap";
 import { supabase } from "../../utils/supabaseClient";
-import IEvent, { undefinedEvent } from "../../components/IEvent";
+
+import IEvent, {undefinedEvent} from '../IEvent';
+
 
 import getEventType from "../../utils/getEventType";
 import getHostId from "../../utils/getHostId";
 import { definitions } from "../../types/supabase";
+
 
 
 
