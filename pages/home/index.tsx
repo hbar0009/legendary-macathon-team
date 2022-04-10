@@ -1,4 +1,3 @@
-import type { NextPage } from "next";
 import Head from "next/head";
 
 import * as React from "react";
@@ -43,6 +42,8 @@ const Home = (session: Session) => {
       website: string;
       description: string;
     };
+    participants: string[];
+    maxParticipants: number;
   }
   const [popupInfo, setPopupInfo] = useState<City | null>();
 
@@ -167,8 +168,11 @@ const Home = (session: Session) => {
                   {`Category: ${popupInfo.category}`}
                 </p>
 
-                {/* was thinking of not showing attendees for now, as clicking join button wont change the number.*/}
-                {/* <p style={{ fontSize: "1rem", color: "#666" }}>0 attendees</p> */}
+                <p style={{ fontSize: "0.8rem", color: "#666" }}>
+                  {`${popupInfo.participants.length} participants joined`}
+                  <br />
+                  {`${popupInfo.maxParticipants} participants needed`}
+                </p>
 
                 <p
                   onClick={() => {
@@ -185,6 +189,7 @@ const Home = (session: Session) => {
                 </p>
 
                 <Button>Join</Button>
+
                 <HostInfoModal
                   hostInfo={selectedHostInfo}
                   show={showHostModal}
