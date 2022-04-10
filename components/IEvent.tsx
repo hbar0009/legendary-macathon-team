@@ -1,6 +1,6 @@
 export enum Category {
-  Community = "Community",
-  Meetup = "Meet up",
+  Community = "Community Event",
+  Meetup = "Local Meetup",
   Volunteering = "Volunteering",
 }
 
