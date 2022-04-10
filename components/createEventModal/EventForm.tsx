@@ -41,8 +41,8 @@ const EventForm = (
                 date: date,
                 address: address,
                 postCode: postcode,
-                startTime = startTime,
-                endTime = endTime,
+                startTime : startTime,
+                endTime : endTime,
             }
             handleButton(newEvent);
         }
