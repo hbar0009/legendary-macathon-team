@@ -21,8 +21,12 @@ import { Button, Offcanvas } from "react-bootstrap";
 import CreateEventModal from "../../components/createEventModal";
 import Profile from "../../components/Profile";
 import HostInfoModal from "../../components/hostInfoModal";
+import { Session } from "@supabase/supabase-js";
 
-const Home: NextPage = () => {
+const Home = (session: Session) => {
+  // console.log(session);
+  const username = session?.user?.email;
+
   interface City {
     title: string;
     date: string;
@@ -68,7 +72,7 @@ const Home: NextPage = () => {
           <Pin
             onClick={() => {
               setPopupInfo(city);
-              console.log(popupInfo);
+              // console.log(popupInfo);
               mapRef.current.flyTo({
                 center: [city.longitude, city.latitude],
                 zoom: 14,

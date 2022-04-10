@@ -12,11 +12,15 @@ const Index: NextPage = () => {
     setSession(supabase.auth.session());
 
     supabase.auth.onAuthStateChange((_event, session) => {
+      // console.log("authData");
+      // console.log(_event);
+      // console.log(session?.user?.email);
+      // console.log(JSON.stringify(session));
       setSession(session);
     });
   }, []);
 
-  return <div>{!session ? <Auth /> : <Home />}</div>;
+  return <div>{!session ? <Auth /> : <Home session={session} />}</div>;
 };
 
 export default Index;

@@ -1,8 +1,7 @@
-import React, { ReactHTMLElement, useState } from "react";
+import React, { useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Link from "next/link";
 import { Accordion } from "react-bootstrap";
 
 export default function Auth() {
