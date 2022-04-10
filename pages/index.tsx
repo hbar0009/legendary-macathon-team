@@ -20,9 +20,9 @@ const Index: NextPage = () => {
     });
   }, []);
 
-  return (
-    <div>{!session ? <Auth /> : <Home username={session?.user?.email} />}</div>
-  );
+  const useremail = String(session?.user?.email);
+
+  return <div>{!session ? <Auth /> : <Home username={useremail} />}</div>;
 };
 
 export default Index;

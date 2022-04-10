@@ -90,7 +90,7 @@ const Home = ({ username }: HomeProp) => {
           />
         </Marker>
       )),
-    [popupInfo]
+    []
   );
   const [showCreateEventModal, setShowCreateEventModal] =
     useState<boolean>(false);
