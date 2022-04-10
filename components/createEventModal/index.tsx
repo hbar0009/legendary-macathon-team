@@ -5,7 +5,7 @@ import EventForm from "../createEventModal/EventForm";
 import { Button, Form, Modal, Col, Row } from "react-bootstrap";
 import { definitions } from "../../types/supabase";
 import { supabase } from "../../utils/supabaseClient";
-import IEvent, {undefinedEvent} from '../../components/IEvent';
+import IEvent, { undefinedEvent } from "../../components/IEvent";
 
 const CreateEventModal = ({
   showModal,
@@ -14,11 +14,10 @@ const CreateEventModal = ({
   showModal: boolean;
   setShowModal: Function;
 }) => {
-
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (event: IEvent) => {
-   setLoading(true);
+    setLoading(true);
     setShowModal(false);
     console.log("Submit button clicked, please pass the data to backend");
 
@@ -44,8 +43,12 @@ const CreateEventModal = ({
       let { data, error, status } = await supabase.from("EVENT").insert({
         event_name: event.title,
         event_desc: event.description,
-        event_start_datetime: new Date(event.date + " " + event.startTime).toISOString(),
-        event_end_datetime: new Date(event.date + " " + event.endTime).toISOString(),
+        event_start_datetime: new Date(
+          event.date + " " + event.startTime
+        ).toISOString(),
+        event_end_datetime: new Date(
+          event.date + " " + event.endTime
+        ).toISOString(),
         event_address: event.address,
         event_postcode: event.postCode,
         et_id: et_id,
@@ -88,7 +91,7 @@ const CreateEventModal = ({
 
       <Modal.Body>
         <EventForm
-          loading = {loading}
+          loading={loading}
           passedEvent={undefinedEvent}
           handleButton={handleSubmit}
           buttonText={"Submit"}
