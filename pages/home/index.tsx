@@ -9,7 +9,6 @@ import Map, {
   Popup,
   NavigationControl,
   FullscreenControl,
-  ScaleControl,
   GeolocateControl,
 } from "react-map-gl";
 
