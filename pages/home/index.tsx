@@ -11,7 +11,9 @@ import Map, {
   FullscreenControl,
   ScaleControl,
   GeolocateControl,
+  
 } from "react-map-gl";
+import 'react-map-gl-geocoder/dist/mapbox-gl-geocoder.css'
 
 import CITIES from "../api/cities.json";
 import Pin from "./pin";

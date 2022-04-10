@@ -5,7 +5,7 @@ import EventForm from "../createEventModal/EventForm";
 import { Button, Form, Modal, Col, Row } from "react-bootstrap";
 import { definitions } from "../../types/supabase";
 import { supabase } from "../../utils/supabaseClient";
-import IEvent, {undefinedEvent} from '../../components/IEvent';
+import IEvent, {undefinedEvent} from '../IEvent';
 
 const CreateEventModal = ({
   showModal,

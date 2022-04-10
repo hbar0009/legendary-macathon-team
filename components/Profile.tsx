@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ListGroupItem,
   Card,
@@ -7,21 +7,21 @@ import {
   Button,
   Tabs,
   Tab,
-  Container
+  Container,
 } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import styles from "../styles/Profile.module.css";
 
-import IEvent, {Category, undefinedEvent} from '../components/IEvent'
-import CreateEventModal from '../components/createEventModal/index'
+import IEvent, { Category, undefinedEvent } from "./IEvent";
+import CreateEventModal from "../components/createEventModal/index";
+import { GetEvents, GetEventByID , GetUserDetails, GetHostedEvents,ConvertToEvent} from "../Functions/SupabaseFunctions";
+import { definitions } from "../types/supabase";
+
 
 
 function EventItem(event: IEvent) {
   return (
-    <ListGroupItem
-      as="li"
-      className="d-flex align-items-start"
-    >
+    <ListGroupItem as="li" className="d-flex align-items-start">
       <div className="ms-2 me-auto">
         <div className="fw-bold">{event.title}</div>
         {event.category}
@@ -33,12 +33,19 @@ function EventItem(event: IEvent) {
   );
 }
 
-function ActionEventItem({event, action}: {event:IEvent, action: (e:IEvent)=> void}){
+function ActionEventItem({
+  event,
+  action,
+}: {
+  event: IEvent;
+  action: (e: IEvent) => void;
+}) {
   return (
     <ListGroupItem
       as="li"
       className="d-flex align-items-start"
-      action onClick={() => action(event)}
+      action
+      onClick={() => action(event)}
     >
       <div className="ms-2 me-auto">
         <div className="fw-bold">{event.title}</div>
@@ -50,128 +57,127 @@ function ActionEventItem({event, action}: {event:IEvent, action: (e:IEvent)=> vo
     </ListGroupItem>
   );
 }
-const NoEvent = () =>{
+const NoEvent = () => {
   return <Card.Text className={styles.noEvents}>No events</Card.Text>;
-}
+};
 
-
-const MyEventsGroup = ({events, action}: {events:IEvent[], action: (e:IEvent)=> void}) => {
-  if (events.length > 0) {
+const MyEventsGroup = ({
+  events,
+  action,
+}: {
+  events: IEvent[] | undefined;
+  action: (e: IEvent) => void;
+}) => {
+  if (events) {
     return (
       <ListGroup className={styles.listGroup} as="ol">
         {events.map((item, index) => {
-          return <ActionEventItem key={index} event = {item} action={action} />;
+          return <ActionEventItem key={index} event={item} action={action} />;
         })}
-        
       </ListGroup>
     );
   } else {
-    return <NoEvent/>
+    return <NoEvent />;
   }
+};
 
-}
-
-
-function EventsGroup(props: { events: any[] }) {
-  if (props.events.length > 0) {
+function EventsGroup({ events }: { events: IEvent[] | undefined }) {
+  if (events) {
     return (
       <ListGroup className={styles.listGroup} as="ol">
-        {props.events.map((item, index) => {
+        {events.map((item, index) => {
           return <EventItem key={index} {...item} />;
         })}
-        
       </ListGroup>
     );
   } else {
-    return <NoEvent/>
+    return <NoEvent />;
   }
 }
 
-function Profile({action}: {action:(e: IEvent)=> void}) {
+async function SetUserDetails(setName:Function, setEmail:Function){
+  const userData = await GetUserDetails();
+  if(userData){
+    setName(userData[0]["part_fname"]);
+    setEmail(userData[0]["part_email"]);
 
-  const currentEvents: IEvent[] = [
-    {...undefinedEvent,
-      title: "Aged care volunteering",
-      category: Category.Volunteering,
-      going: 8,
-    },
-    {...undefinedEvent,
-      title: "Food distribution volunteering",
-      category: Category.Volunteering,
-      going: 25,
-    },
-    { ...undefinedEvent,
-      title: "Anti-war rally", category: Category.Community, going: 652 },
-  ];
+  }
+}
 
-  const ownEvents :IEvent[] =[
-    {...undefinedEvent,
-      title: "Gamers meetup",
-      category: Category.Meetup,
-      description:"",
-      going: 17,
+async function GetCurrentEvents(setCurrentEvents: Function, setPastEvents:Function) {
+  const data = await GetEvents();
 
+  if (data) {
+    const eventsArray = await Promise.all(
+      data.map((item) => GetEventByID(item.event_id))
+    );
+    if(eventsArray){
+      const pastEvents = eventsArray.filter((event) => {
+        var currentDate = new Date();
+        if(event){
+          var endDate = new Date(event.endTime);
+          return (currentDate.getTime() > endDate.getTime())
+        }
+        return false;
+      } );
+      setPastEvents(pastEvents);
     }
-  ]
+   
+    if (eventsArray) {
+      setCurrentEvents(eventsArray);
+    }
+  }
+}
+
+async function GetMyEvents(setHostedEvents: Function) {
+  const eventsArray = await GetHostedEvents();
+  setHostedEvents(eventsArray);
+}
 
 
-  const historicalEvents: IEvent[] = [
-    {...undefinedEvent,
-      title: "Elderly pickup",
-      category: Category.Volunteering,
-      description:"",
-      going: 10,
-    },
-    {...undefinedEvent,
-      title: "Student guide",
-      category: Category.Volunteering,
-      description:"",
-      going: 7,
-    },
-    {...undefinedEvent,
-      title: "Food  volunteering",
-      category: Category.Volunteering,
-      description:"",
-      going: 10,
-    },
-    { ...undefinedEvent, title: "Cycle meetup", category: Category.Meetup,  description:"", going: 22 },
-    {...undefinedEvent, title: "Anti-Lockdown rally", category: Category.Community,  description:"", going: 500 },
-  ];
-  const name = "John Smith";
-  const email = "John.smith@gmail.com";
+function Profile({ action }: { action: (e: IEvent) => void }) {
+  const [currentEvents, setCurrentEvents] = useState<IEvent[]>();
+  const [hostedEvents, setHostedEvents] = useState<IEvent[]>();
+  const [pastEvents, setPastEvents] = useState<IEvent[]>();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+
+  useEffect(() => {
+    GetCurrentEvents(setCurrentEvents,setPastEvents);
+    SetUserDetails(setName,setEmail );
+    GetMyEvents(setHostedEvents);
+  }, []);
+  
 
   return (
     <Container className={styles.container}>
-      
-        <Image
-          className={styles.profileImage}
-          roundedCircle
-          thumbnail
-          src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-        />
+      <Image
+        className={styles.profileImage}
+        roundedCircle
+        thumbnail
+        src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+      />
 
-        <Card.Title className={styles.profileName}> {name}</Card.Title>
-        <Card.Text>{email}</Card.Text>
-        <Tabs className = {styles.tabs}
-          defaultActiveKey="current"
-        
-        >
-          <Tab eventKey="current" title="Current" className={styles.tab}>
-          <EventsGroup events={currentEvents} /> 
-          </Tab>
-          <Tab eventKey="history" title="History" className={styles.tab}>
-          <EventsGroup events={historicalEvents}  /> 
-          </Tab>
-          <Tab  eventKey="owned" title="Hosting" className={styles.tab}>
-          <MyEventsGroup events={ownEvents} action = {action} /> 
-          </Tab>
-        </Tabs>
-   
-      <Card.Body className={styles.body}>
-      
-      </Card.Body>
-   
-    <Button className={styles.button} variant="primary">Sign Out</Button>
+      <Card.Title className={styles.profileName}> {name}</Card.Title>
+      <Card.Text>{email}</Card.Text>
+      <Tabs className={styles.tabs} defaultActiveKey="current">
+        <Tab eventKey="current" title="Current" className={styles.tab}>
+          <EventsGroup events={currentEvents} />
+        </Tab>
+        <Tab eventKey="history" title="History" className={styles.tab}>
+          <EventsGroup events={pastEvents} />
+        </Tab>
+        <Tab eventKey="owned" title="Hosting" className={styles.tab}>
+          <MyEventsGroup events={hostedEvents} action={action} />
+        </Tab>
+      </Tabs>
+
+      <Card.Body className={styles.body}></Card.Body>
+
+      <Button className={styles.button} variant="primary">
+        Sign Out
+      </Button>
     </Container>
   );
 }
