@@ -13,7 +13,7 @@ import Map, {
   GeolocateControl,
 } from "react-map-gl";
 
-import CITIES from "../api/cities.json";
+import Data from "../api/cities.json";
 import Pin from "./pin";
 
 import { Button, Offcanvas } from "react-bootstrap";
@@ -22,8 +22,10 @@ import CreateEventModal from "../../components/createEventModal";
 import Profile from "../../components/Profile";
 import HostInfoModal from "../../components/hostInfoModal";
 
+import EventList from "../../components/eventList";
+
 const Home: NextPage = () => {
-  interface City {
+  interface Data {
     title: string;
     date: string;
     category: string;
@@ -40,7 +42,7 @@ const Home: NextPage = () => {
       description: string;
     };
   }
-  const [popupInfo, setPopupInfo] = useState<City | null>();
+  const [popupInfo, setPopupInfo] = useState<Data | null>();
 
   const [viewState, setViewState] = useState({
     latitude: -25,
@@ -51,26 +53,28 @@ const Home: NextPage = () => {
   const mapRef = useRef<any>(null);
 
   const onMapLoad = React.useCallback(() => {
-    mapRef.current.on("move", () => {
-      // do something when move
+    mapRef.current.on("load", () => {
+      null;
     });
   }, []);
 
+
+
+
   const pins = useMemo(
     () =>
-      CITIES.map((city, index) => (
+      Data.map((data, index) => (
         <Marker
           key={`marker-${index}`}
-          longitude={city.longitude}
-          latitude={city.latitude}
+          longitude={data.longitude}
+          latitude={data.latitude}
           anchor="bottom"
         >
           <Pin
             onClick={() => {
-              setPopupInfo(city);
-              console.log(popupInfo);
+              setPopupInfo(data);
               mapRef.current.flyTo({
-                center: [city.longitude, city.latitude],
+                center: [data.longitude, data.latitude],
                 zoom: 14,
                 speed: 0.8,
                 curve: 1,
@@ -79,7 +83,7 @@ const Home: NextPage = () => {
           />
         </Marker>
       )),
-    [popupInfo]
+    []
   );
   const [showCreateEventModal, setShowCreateEventModal] =
     useState<boolean>(false);
@@ -137,10 +141,9 @@ const Home: NextPage = () => {
           mapStyle="mapbox://styles/mong00x/cl1qkztx0000m15o5638w9apn"
           mapboxAccessToken={process.env.MAPBOX_TOKEN}
         >
-          <GeolocateControl position="bottom-left" />
-          <FullscreenControl position="bottom-left" />
-          <NavigationControl position="bottom-left" />
-          <ScaleControl />
+          <GeolocateControl position="bottom-right" />
+          <FullscreenControl position="bottom-right" />
+          <NavigationControl position="bottom-right" />
 
           {pins}
 
@@ -202,7 +205,6 @@ const Home: NextPage = () => {
             zIndex: 2,
           }}
           onClick={() =>
-            console.log(
               navigator.geolocation.getCurrentPosition((position) => {
                 mapRef.current.flyTo({
                   center: [position.coords.longitude, position.coords.latitude],
@@ -211,7 +213,7 @@ const Home: NextPage = () => {
                   curve: 1,
                 });
               })
-            )
+            
           }
         >
           Check events near me!
@@ -270,6 +272,9 @@ const Home: NextPage = () => {
             <Profile />
           </Offcanvas.Body>
         </Offcanvas>
+
+          <EventList ref={mapRef}/>
+
       </main>
     </div>
   );
