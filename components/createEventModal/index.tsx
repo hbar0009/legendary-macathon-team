@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, Modal, Col, Row } from "react-bootstrap";
+import { definitions } from "../../types/supabase";
 import { supabase } from "../../utils/supabaseClient";
 
 const CreateEventModal = ({
@@ -51,16 +52,18 @@ const CreateEventModal = ({
       console.log(host_id);
 
       // insert into the database
-      let { data, error, status } = await supabase.from("EVENT").insert({
-        event_name: title,
-        event_desc: description,
-        event_start_datetime: new Date(date + " " + startTime).toISOString(),
-        event_end_datetime: new Date(date + " " + endTime).toISOString(),
-        event_address: address,
-        event_postcode: postcode,
-        et_id: et_id,
-        event_host: host_id,
-      });
+      let { data, error, status } = await supabase
+        .from<definitions["EVENT"]>("EVENT")
+        .insert({
+          event_name: title,
+          event_desc: description,
+          event_start_datetime: new Date(date + " " + startTime).toISOString(),
+          event_end_datetime: new Date(date + " " + endTime).toISOString(),
+          event_address: address,
+          event_postcode: postcode,
+          et_id: et_id,
+          event_host: host_id,
+        });
 
       if (error) throw error;
     } catch (error: any) {
@@ -70,7 +73,7 @@ const CreateEventModal = ({
 
   async function getEventType() {
     const { data, error } = await supabase
-      .from("EVENT_TYPE")
+      .from<definitions["EVENT_TYPE"]>("EVENT_TYPE")
       .select("et_id")
       .eq("et_name", category);
 
@@ -81,7 +84,7 @@ const CreateEventModal = ({
 
   async function getHostId() {
     const { data, error } = await supabase
-      .from("PARTICIPANT")
+      .from<definitions["PARTICIPANT"]>("PARTICIPANT")
       .select("part_id")
       .eq("part_email", supabase.auth.session()?.user?.email);
 
