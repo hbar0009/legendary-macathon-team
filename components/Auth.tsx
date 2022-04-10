@@ -2,16 +2,27 @@ import React, { ReactHTMLElement, useState } from "react";
 import { supabase } from "../utils/supabaseClient";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Link from "next/link";
 import { Accordion } from "react-bootstrap";
+import { definitions } from "../types/supabase";
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
-  function validateForm() {
+  function validateLogin() {
     return email.length > 0 && password.length > 0;
+  }
+
+  function validateSignUp() {
+    return (
+      email.length > 0 &&
+      password.length > 0 &&
+      firstName.length > 0 &&
+      lastName.length > 0
+    );
   }
 
   const handleLogin = async (email: string, password: string) => {
@@ -37,13 +48,38 @@ export default function Auth() {
         email: email,
         password: password,
       });
+
+      await addUserToDatabase(email, firstName, lastName);
+
       if (error) throw error;
-      alert("Signed in successfully!");
+
+      alert("Signed up successfully!");
     } catch (error: any) {
       alert(error.error_description || error.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const addUserToDatabase = async (
+    email: string,
+    firstName: string,
+    lastName: string
+  ) => {
+    const { error } = await supabase
+      .from<definitions["PARTICIPANT"]>("PARTICIPANT")
+      .insert(
+        [
+          {
+            part_email: email,
+            part_fname: firstName,
+            part_lname: lastName,
+          },
+        ],
+        { returning: "minimal" }
+      );
+
+    if (error) throw error;
   };
 
   return (
@@ -78,7 +114,7 @@ export default function Auth() {
               <Button
                 style={{ marginTop: "30px" }}
                 type="submit"
-                disabled={!validateForm()}
+                disabled={!validateLogin()}
               >
                 <span>{loading ? "Loading..." : "Login"}</span>
               </Button>
@@ -94,6 +130,24 @@ export default function Auth() {
                 handleSignUp(email, password);
               }}
             >
+              <Form.Group controlId="firstName">
+                <Form.Label>First Name</Form.Label>
+                <Form.Control
+                  autoFocus
+                  type="firstName"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </Form.Group>
+              <Form.Group controlId="lastName">
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control
+                  autoFocus
+                  type="lastName"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </Form.Group>
               <Form.Group controlId="email">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
@@ -114,7 +168,7 @@ export default function Auth() {
               <Button
                 style={{ marginTop: "30px" }}
                 type="submit"
-                disabled={!validateForm()}
+                disabled={!validateSignUp()}
               >
                 <span>{loading ? "Loading..." : "Sign Up"}</span>
               </Button>
