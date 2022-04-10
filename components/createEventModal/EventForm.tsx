@@ -21,7 +21,8 @@ const EventForm = (
     const [address, setAddress] = useState(passedEvent.address);
     const [postcode, setPostCode] = useState(passedEvent.postCode);
     const [validated, setValidated] = useState(false);
-    
+    const [startTime, setStartTime] = useState("");
+    const [endTime, setEndTime] = useState("");
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         const form = event.currentTarget;
@@ -39,7 +40,9 @@ const EventForm = (
                 going: passedEvent.going,
                 date: date,
                 address: address,
-                postCode: postcode
+                postCode: postcode,
+                startTime = startTime,
+                endTime = endTime,
             }
             handleButton(newEvent);
         }
@@ -79,6 +82,38 @@ const EventForm = (
             />
           </Col>
         </Form.Group>
+        <Row>
+            <Col>
+              <Form.Group as={Row} className="general-form-group">
+                <Form.Label column sm={2}>
+                  Start
+                </Form.Label>
+                <Col>
+                  <Form.Control
+                    required
+                    type="time"
+                    value={startTime}
+                    onChange={(event) => setStartTime(event.target.value)}
+                  />
+                </Col>
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group as={Row} className="general-form-group">
+                <Form.Label column sm={2}>
+                  End
+                </Form.Label>
+                <Col>
+                  <Form.Control
+                    required
+                    type="time"
+                    value={endTime}
+                    onChange={(event) => setEndTime(event.target.value)}
+                  />
+                </Col>
+              </Form.Group>
+            </Col>
+          </Row>
 
         <Form.Group as={Row} className="general-form-group">
           <Form.Label column sm={2}>

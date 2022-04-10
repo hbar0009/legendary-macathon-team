@@ -12,6 +12,8 @@ interface IEvent {
   date: string;
   address: string;
   postCode: string;
+  startTime: string,
+  endTime: string,
 }
 
 export const undefinedEvent: IEvent = {
@@ -22,6 +24,8 @@ export const undefinedEvent: IEvent = {
   date: "",
   address: "",
   postCode: "",
+  startTime: "",
+  endTime: "",
 };
 
 export default IEvent;
