@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Button, Form, Modal, Col, Row } from "react-bootstrap";
+import { supabase } from "../../utils/supabaseClient";
 
 const CreateEventModal = ({
   showModal,
@@ -11,22 +12,83 @@ const CreateEventModal = ({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [category, setCategory] = useState("");
   const [address, setAddress] = useState("");
   const [postcode, setPostCode] = useState("");
   const [validated, setValidated] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  // TODO: edit this function to send eventData to backend
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setLoading(true);
+
     const form = event.currentTarget;
+    event.preventDefault();
+
     if (form.checkValidity() === false) {
-      event.preventDefault();
       event.stopPropagation();
     }
     setValidated(true);
     console.log("Submit button clicked, please pass the data to backend");
+
+    await createEvent();
+
+    setLoading(false);
     setShowModal(false);
   };
+
+  async function createEvent() {
+    try {
+      // retrieve event type information based on selected category
+      const et_id = await getEventType();
+
+      console.log(et_id);
+
+      // get user id of logged in user
+      const host_id = await getHostId();
+
+      console.log(host_id);
+
+      // insert into the database
+      let { data, error, status } = await supabase.from("EVENT").insert({
+        event_name: title,
+        event_desc: description,
+        event_start_datetime: new Date(date + " " + startTime).toISOString(),
+        event_end_datetime: new Date(date + " " + endTime).toISOString(),
+        event_address: address,
+        event_postcode: postcode,
+        et_id: et_id,
+        event_host: host_id,
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      alert(error.error_description || error.message);
+    }
+  }
+
+  async function getEventType() {
+    const { data, error } = await supabase
+      .from("EVENT_TYPE")
+      .select("et_id")
+      .eq("et_name", category);
+
+    if (error) throw error;
+
+    return data[0]["et_id"];
+  }
+
+  async function getHostId() {
+    const { data, error } = await supabase
+      .from("PARTICIPANT")
+      .select("part_id")
+      .eq("part_email", supabase.auth.session()?.user?.email);
+
+    if (error) throw error;
+
+    return data[0]["part_id"];
+  }
 
   return (
     <Modal show={showModal}>
@@ -66,6 +128,39 @@ const CreateEventModal = ({
               />
             </Col>
           </Form.Group>
+
+          <Row>
+            <Col>
+              <Form.Group as={Row} className="general-form-group">
+                <Form.Label column sm={2}>
+                  Start
+                </Form.Label>
+                <Col>
+                  <Form.Control
+                    required
+                    type="time"
+                    value={startTime}
+                    onChange={(event) => setStartTime(event.target.value)}
+                  />
+                </Col>
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group as={Row} className="general-form-group">
+                <Form.Label column sm={2}>
+                  End
+                </Form.Label>
+                <Col>
+                  <Form.Control
+                    required
+                    type="time"
+                    value={endTime}
+                    onChange={(event) => setEndTime(event.target.value)}
+                  />
+                </Col>
+              </Form.Group>
+            </Col>
+          </Row>
 
           <Form.Group as={Row} className="general-form-group">
             <Form.Label column sm={2}>
@@ -115,7 +210,7 @@ const CreateEventModal = ({
                   <Form.Control
                     required
                     type="text"
-                    placeholder="PostCode"
+                    placeholder="Post Code"
                     value={postcode}
                     onChange={(event) => setPostCode(event.target.value)}
                   />
@@ -144,7 +239,7 @@ const CreateEventModal = ({
           </Form.Group>
           <div style={{ marginTop: "20px" }}>
             <Button id="createButton" type="submit" style={{ margin: "5px" }}>
-              Create Event
+              <span>{loading ? "Loading..." : "Create Event"}</span>
             </Button>
 
             <Button
