@@ -14,7 +14,9 @@
       "phone": "03 9905 4000",
       "website": "https://www.monash.edu/",
       "description": "Monash University is a public research university based in Melbourne, Victoria, Australia. "
-    }
+    },
+    "participants": ["001@email.com", "002@email.com"],
+    "maxParticipants": 10
   },
   {
     "title": "Community market",
@@ -31,7 +33,9 @@
       "phone": "1300 884 233",
       "website": "https://www.unicef.org/",
       "description": "UNICEF, in full called the United Nations Children's Fund, is an agency of the United Nations responsible for providing humanitarian and developmental aid to children worldwide. "
-    }
+    },
+    "participants": ["001@email.com", "002@email.com", "test@001.com"],
+    "maxParticipants": 5
   },
   {
     "title": "Gamers meetup",
@@ -48,6 +52,8 @@
       "phone": "03 9905 4000",
       "website": "https://msa.monash.edu/",
       "description": "The MSA is made up of elected student representatives who represent all undergraduate Clayton campus students on general issues such as education, fees and student welfare, and also specific issues such as women's affairs and queer affairs. "
-    }
+    },
+    "participants": ["001@email.com", "002@email.com"],
+    "maxParticipants": 2
   }
 ]
