@@ -3,7 +3,7 @@ import Head from "next/head";
 
 import * as React from "react";
 import { useState, useMemo, useRef } from "react";
-
+import Search from '../../components/Search';
 import Map, {
   Marker,
   Popup,
@@ -85,6 +85,7 @@ const Home: NextPage = () => {
     useState<boolean>(false);
 
   const [showProfile, setShowProfile] = useState<boolean>(false);
+  const [showSearch, setShowSearch] = useState<boolean>(false);
 
   // store which event host has been selected and shown
   const [selectedHostInfo, setSelectedHostInfo] = useState<object>({
@@ -237,6 +238,35 @@ const Home: NextPage = () => {
           Create Event
         </Button>
 
+        <Button
+          style={{
+            zIndex: "2",
+            background: "white",
+            borderColor: "white",
+            color: "blue",
+            position: "fixed",
+            top: "0",
+            right: "0",
+            marginTop: "75px",
+            marginRight: "30px",
+            fontWeight: "500",
+          }}
+          onClick={() => {
+            setShowSearch(!showProfile);
+          }}
+        >
+          Search
+        </Button>
+
+        <Offcanvas show={showSearch} onHide={() => setShowSearch(false)} placement = 'end'>
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>Search</Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            <Search/>
+          </Offcanvas.Body>
+        </Offcanvas>
+
         <CreateEventModal
           showModal={showCreateEventModal}
           setShowModal={setShowCreateEventModal}
@@ -262,9 +292,10 @@ const Home: NextPage = () => {
         >
           Profile
         </Button>
+       
         <Offcanvas show={showProfile} onHide={() => setShowProfile(false)}>
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+            <Offcanvas.Title>Profile</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Profile />
