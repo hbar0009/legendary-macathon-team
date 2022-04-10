@@ -13,10 +13,10 @@ import Map, {
   GeolocateControl,
 } from "react-map-gl";
 
-import CITIES from "../api/cities.json";
+import Data from "../api/cities.json";
 import Pin from "./pin";
 
-import { Button, Offcanvas } from "react-bootstrap";
+import { Button, Offcanvas, ListGroup } from "react-bootstrap";
 
 import CreateEventModal from "../../components/createEventModal";
 import EditEventModal from "../../components/editEventModal/EditEventModal";
@@ -25,7 +25,7 @@ import Profile from "../../components/Profile";
 import IEvent, { undefinedEvent } from "../../components/IEvent";
 
 import HostInfoModal from "../../components/hostInfoModal";
-
+import styles from "../../styles/EventList.module.css";
 interface HomeProp {
   username: string;
 }
@@ -36,7 +36,7 @@ const Home = ({ username }: HomeProp) => {
   // const username = session?.user?.email;
   const router = useRouter();
 
-  interface City {
+  interface Data {
     title: string;
     date: string;
     category: string;
@@ -55,38 +55,37 @@ const Home = ({ username }: HomeProp) => {
     participants: string[];
     maxParticipants: number;
   }
-  const [popupInfo, setPopupInfo] = useState<City | null>();
+  const [popupInfo, setPopupInfo] = useState<Data | null>();
 
   const [viewState, setViewState] = useState({
-    latitude: -25,
-    longitude: 135,
-    zoom: 4,
+    latitude: -37.8,
+    longitude: 144.9,
+    zoom: 10,
   });
 
   const mapRef = useRef<any>(null);
 
   const onMapLoad = React.useCallback(() => {
-    mapRef.current.on("move", () => {
-      // do something when move
+    mapRef.current.on("load", () => {
+      null;
     });
   }, []);
 
   const pins = useMemo(
     () =>
-      CITIES.map((city, index) => (
+      Data.map((data, index) => (
         <Marker
           key={`marker-${index}`}
-          longitude={city.longitude}
-          latitude={city.latitude}
+          longitude={data.longitude}
+          latitude={data.latitude}
           anchor="bottom"
         >
           <Pin
             onClick={() => {
-              setPopupInfo(city);
-              // console.log(popupInfo);
+              setPopupInfo(data);
               mapRef.current.flyTo({
-                center: [city.longitude, city.latitude],
-                zoom: 14,
+                center: [data.longitude, data.latitude],
+                zoom: 16,
                 speed: 0.8,
                 curve: 1,
               });
@@ -156,10 +155,9 @@ const Home = ({ username }: HomeProp) => {
           mapStyle="mapbox://styles/mong00x/cl1qkztx0000m15o5638w9apn"
           mapboxAccessToken={process.env.MAPBOX_TOKEN}
         >
-          <GeolocateControl position="bottom-left" />
-          <FullscreenControl position="bottom-left" />
-          <NavigationControl position="bottom-left" />
-          <ScaleControl />
+          <GeolocateControl position="bottom-right" />
+          <FullscreenControl position="bottom-right" />
+          <NavigationControl position="bottom-right" />
 
           {pins}
 
@@ -233,32 +231,6 @@ const Home = ({ username }: HomeProp) => {
         </Map>
 
         <Button
-          variant="primary"
-          style={{
-            position: "fixed",
-            left: "0",
-            top: "0",
-            marginTop: "25px",
-            marginLeft: "8rem",
-            zIndex: 2,
-          }}
-          onClick={() =>
-            console.log(
-              navigator.geolocation.getCurrentPosition((position) => {
-                mapRef.current.flyTo({
-                  center: [position.coords.longitude, position.coords.latitude],
-                  zoom: 14,
-                  speed: 0.8,
-                  curve: 1,
-                });
-              })
-            )
-          }
-        >
-          Check events near me!
-        </Button>
-
-        <Button
           style={{
             zIndex: "2",
             background: "white",
@@ -321,6 +293,82 @@ const Home = ({ username }: HomeProp) => {
             />
           </Offcanvas.Body>
         </Offcanvas>
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            position: "fixed",
+            zIndex: 2,
+            width: "25%",
+            maxHeight: "460px",
+            top: "100px",
+            left: "30px",
+            backgroundColor: "white",
+            boxShadow: "0px 4px 10px 0px rgba(0,0,0,0.25)",
+            borderRadius: "4px",
+          }}
+        >
+          <h3 className={styles.title}>Event List</h3>
+
+          <ListGroup style={{ overflowY: "scroll" }}>
+            {Data.map((event) => {
+              return (
+                <ListGroup.Item
+                  key={Data.indexOf(event)}
+                  className={styles.listItem}
+                  onClick={() => {
+                    setPopupInfo(event);
+                    mapRef.current.flyTo({
+                      center: [event.longitude, event.latitude],
+                      zoom: 16,
+                      speed: 0.8,
+                      curve: 1,
+                    });
+                  }}
+                >
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <div style={{ fontWeight: "bold" }}>{event.title}</div>
+                    <div className={styles.date}>{event.date}</div>
+                  </div>
+
+                  <div className={styles.address}>{event.address}</div>
+                  <div className={styles.description}>{event.description}</div>
+                  <a href={event.host.website} className={styles.host}>
+                    {event.host.name}
+                  </a>
+                </ListGroup.Item>
+              );
+            })}
+          </ListGroup>
+          <Button
+            variant="primary"
+            style={{
+              position: "relative",
+              margin: "12px",
+
+              // left: "0",
+              // top: "0",
+              // marginTop: "25px",
+              // marginLeft: "8rem",
+              // zIndex: 2,
+            }}
+            onClick={() =>
+              navigator.geolocation.getCurrentPosition((position) => {
+                mapRef.current.flyTo({
+                  center: [position.coords.longitude, position.coords.latitude],
+                  zoom: 14,
+                  speed: 0.8,
+                  curve: 1,
+                });
+              })
+            }
+          >
+            Check events near me!
+          </Button>
+        </div>
       </main>
     </div>
   );
