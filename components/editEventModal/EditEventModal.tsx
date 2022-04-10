@@ -1,35 +1,36 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal } from "react-bootstrap";
-import IEvent, { undefinedEvent } from "../IEvent";
+import IEvent from "../IEvent";
 import EventForm from "../createEventModal/EventForm";
-const CreateEventModal = ({
+const EditEventModal = ({
   showModal,
   setShowModal,
+  event,
 }: {
   showModal: boolean;
   setShowModal: Function;
+  event: IEvent ;
 }) => {
-  // TODO: edit this function to send eventData to backend
-  const handleSubmit = (e: IEvent) => {
+
+  const handleSave = (e: IEvent) => {
     setShowModal(false);
   };
-
 
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)}>
       <Modal.Header closeButton>
-        <Modal.Title>Create Event</Modal.Title>
+        <Modal.Title>"Edit Event"</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
         <EventForm
-          passedEvent={undefinedEvent}
-          handleButton={handleSubmit}
-          buttonText={"Submit"}
+          passedEvent={event}
+          handleButton={handleSave}
+          buttonText={"Save"}
         />
       </Modal.Body>
     </Modal>
   );
 };
 
-export default CreateEventModal;
+export default EditEventModal;

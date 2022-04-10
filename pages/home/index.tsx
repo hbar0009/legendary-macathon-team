@@ -19,6 +19,7 @@ import Pin from "./pin";
 import { Button, Offcanvas } from "react-bootstrap";
 
 import CreateEventModal from "../../components/createEventModal";
+import EditEventModal from "../../components/editEventModal/EditEventModal";
 import Profile from "../../components/Profile";
 import IEvent, { undefinedEvent } from "../../components/IEvent";
 
@@ -78,7 +79,10 @@ const Home: NextPage = () => {
   const [showCreateEventModal, setShowCreateEventModal] =
     useState<boolean>(false);
 
-  const [modalEvent, setModalEvent] = useState<IEvent | null>(undefinedEvent);
+  const [showEditEventModal, setShowEditEventModal] =
+  useState<boolean>(false);
+
+  const [editEvent, setEditEvent] = useState<IEvent>(undefinedEvent);
 
   const [showProfile, setShowProfile] = useState<boolean>(false);
 
@@ -187,7 +191,6 @@ const Home: NextPage = () => {
             fontWeight: "500",
           }}
           onClick={() => {
-            setModalEvent(null);
             setShowCreateEventModal(true);
           }}
         >
@@ -197,8 +200,13 @@ const Home: NextPage = () => {
         <CreateEventModal
           showModal={showCreateEventModal}
           setShowModal={setShowCreateEventModal}
-          event={modalEvent}
         />
+        <EditEventModal
+         showModal={showEditEventModal}
+         setShowModal={setShowEditEventModal}
+         event = {editEvent}
+        />
+
 
         <Button
           variant="primary"
@@ -227,8 +235,8 @@ const Home: NextPage = () => {
           <Offcanvas.Body>
             <Profile
               action={(e: IEvent) => {
-                setModalEvent(e);
-                setShowCreateEventModal(true);
+                setEditEvent(e);
+                setShowEditEventModal(true);
               }}
             />
           </Offcanvas.Body>
