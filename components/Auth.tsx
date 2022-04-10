@@ -3,6 +3,7 @@ import { supabase } from "../utils/supabaseClient";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Accordion } from "react-bootstrap";
+import { definitions } from "../types/supabase";
 
 export default function Auth() {
   const [loading, setLoading] = useState(false);
@@ -65,16 +66,18 @@ export default function Auth() {
     firstName: string,
     lastName: string
   ) => {
-    const { error } = await supabase.from("PARTICIPANT").insert(
-      [
-        {
-          part_email: email,
-          part_fname: firstName,
-          part_lname: lastName,
-        },
-      ],
-      { returning: "minimal" }
-    );
+    const { error } = await supabase
+      .from<definitions["PARTICIPANT"]>("PARTICIPANT")
+      .insert(
+        [
+          {
+            part_email: email,
+            part_fname: firstName,
+            part_lname: lastName,
+          },
+        ],
+        { returning: "minimal" }
+      );
 
     if (error) throw error;
   };

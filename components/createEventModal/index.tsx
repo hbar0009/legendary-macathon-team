@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import EventForm from "../createEventModal/EventForm";
 
 import { Button, Form, Modal, Col, Row } from "react-bootstrap";
+import { definitions } from "../../types/supabase";
 import { supabase } from "../../utils/supabaseClient";
 import IEvent, {undefinedEvent} from '../../components/IEvent';
 
@@ -57,7 +58,7 @@ const CreateEventModal = ({
 
   async function getEventType(event: IEvent) {
     const { data, error } = await supabase
-      .from("EVENT_TYPE")
+      .from<definitions["EVENT_TYPE"]>("EVENT_TYPE")
       .select("et_id")
       .eq("et_name", event.category);
 
@@ -68,7 +69,7 @@ const CreateEventModal = ({
 
   async function getHostId() {
     const { data, error } = await supabase
-      .from("PARTICIPANT")
+      .from<definitions["PARTICIPANT"]>("PARTICIPANT")
       .select("part_id")
       .eq("part_email", supabase.auth.session()?.user?.email);
 
