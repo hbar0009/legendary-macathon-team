@@ -19,7 +19,11 @@ import Pin from "./pin";
 import { Button, Offcanvas } from "react-bootstrap";
 
 import CreateEventModal from "../../components/createEventModal";
+import EditEventModal from "../../components/editEventModal/EditEventModal";
 import Profile from "../../components/Profile";
+
+import IEvent, { undefinedEvent } from "../../components/IEvent";
+
 import HostInfoModal from "../../components/hostInfoModal";
 
 interface HomeProp {
@@ -94,6 +98,10 @@ const Home = ({ username }: HomeProp) => {
   );
   const [showCreateEventModal, setShowCreateEventModal] =
     useState<boolean>(false);
+
+  const [showEditEventModal, setShowEditEventModal] = useState<boolean>(false);
+
+  const [editEvent, setEditEvent] = useState<IEvent>(undefinedEvent);
 
   const [showProfile, setShowProfile] = useState<boolean>(false);
 
@@ -274,6 +282,11 @@ const Home = ({ username }: HomeProp) => {
           showModal={showCreateEventModal}
           setShowModal={setShowCreateEventModal}
         />
+        <EditEventModal
+          showModal={showEditEventModal}
+          setShowModal={setShowEditEventModal}
+          event={editEvent}
+        />
 
         <Button
           variant="primary"
@@ -297,10 +310,15 @@ const Home = ({ username }: HomeProp) => {
         </Button>
         <Offcanvas show={showProfile} onHide={() => setShowProfile(false)}>
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+            <Offcanvas.Title>Profile</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Profile />
+            <Profile
+              action={(e: IEvent) => {
+                setEditEvent(e);
+                setShowEditEventModal(true);
+              }}
+            />
           </Offcanvas.Body>
         </Offcanvas>
       </main>
