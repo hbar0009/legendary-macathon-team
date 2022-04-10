@@ -6,12 +6,12 @@ const EventForm = ({
   passedEvent,
   handleButton,
   buttonText,
-  loading
+  loading,
 }: {
   passedEvent: IEvent;
   handleButton: (e: IEvent) => void;
   buttonText: string;
-  loading:boolean;
+  loading: boolean;
 }) => {
   const [title, setTitle] = useState(passedEvent.title);
   const [description, setDescription] = useState(passedEvent.description);
@@ -22,7 +22,6 @@ const EventForm = ({
   const [validated, setValidated] = useState(false);
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     const form = event.currentTarget;
@@ -45,8 +44,6 @@ const EventForm = ({
       };
       handleButton(newEvent);
     }
-
-
   };
 
   return (
@@ -162,7 +159,7 @@ const EventForm = ({
           <Form.Control
             required
             type="text"
-            placeholder="PostCode"
+            placeholder="Post Code"
             value={postcode}
             onChange={(event) => setPostCode(event.target.value)}
           />
