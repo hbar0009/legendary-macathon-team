@@ -20,11 +20,15 @@ import { Button, Offcanvas } from "react-bootstrap";
 import CreateEventModal from "../../components/createEventModal";
 import Profile from "../../components/Profile";
 import HostInfoModal from "../../components/hostInfoModal";
-import { Session } from "@supabase/supabase-js";
 
-const Home = (session: Session) => {
+interface HomeProp {
+  username: string;
+}
+
+const Home = ({ username }: HomeProp) => {
   // console.log(session);
-  const username = session?.user?.email;
+  // console.log(session.user.email);
+  // const username = session?.user?.email;
 
   interface City {
     title: string;
@@ -188,7 +192,19 @@ const Home = (session: Session) => {
                   {`Event hosted by ${popupInfo.host.name}`}
                 </p>
 
-                <Button>Join</Button>
+                {/* {console.log(username.username)} */}
+                {popupInfo.participants.includes(username) ? (
+                  <Button disabled>Joined</Button>
+                ) : (
+                  <>
+                    {popupInfo.participants.length >=
+                    popupInfo.maxParticipants ? (
+                      <Button disabled>Max participants reached</Button>
+                    ) : (
+                      <Button>Join</Button>
+                    )}
+                  </>
+                )}
 
                 <HostInfoModal
                   hostInfo={selectedHostInfo}
