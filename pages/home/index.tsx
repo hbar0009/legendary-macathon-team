@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 import * as React from "react";
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useRef } from "react";
 
 import Map, {
   Marker,
@@ -20,6 +20,8 @@ import { Button, Offcanvas } from "react-bootstrap";
 
 import CreateEventModal from "../../components/createEventModal";
 import Profile from "../../components/Profile";
+import HostInfoModal from "../../components/hostInfoModal";
+
 const Home: NextPage = () => {
   interface City {
     title: string;
@@ -30,6 +32,13 @@ const Home: NextPage = () => {
     description: string;
     latitude: number;
     longitude: number;
+    host: {
+      name: string;
+      address: string;
+      phone: string;
+      website: string;
+      description: string;
+    };
   }
   const [popupInfo, setPopupInfo] = useState<City | null>();
 
@@ -60,12 +69,12 @@ const Home: NextPage = () => {
             onClick={() => {
               setPopupInfo(city);
               console.log(popupInfo);
-                mapRef.current.flyTo({
-                  center: [city.longitude, city.latitude],
-                  zoom: 14,
-                  speed: 0.8,
-                  curve: 1,
-                });
+              mapRef.current.flyTo({
+                center: [city.longitude, city.latitude],
+                zoom: 14,
+                speed: 0.8,
+                curve: 1,
+              });
             }}
           />
         </Marker>
@@ -76,6 +85,17 @@ const Home: NextPage = () => {
     useState<boolean>(false);
 
   const [showProfile, setShowProfile] = useState<boolean>(false);
+
+  // store which event host has been selected and shown
+  const [selectedHostInfo, setSelectedHostInfo] = useState<object>({
+    name: "string",
+    address: "string",
+    phone: "string",
+    website: "string",
+    description: "string",
+  });
+  const [showHostModal, setShowHostModal] = useState<boolean>(false);
+
   return (
     <div>
       <Head>
@@ -103,8 +123,6 @@ const Home: NextPage = () => {
           alignItems: "center",
         }}
       >
-       
-
         <Map
           {...viewState}
           ref={mapRef}
@@ -135,14 +153,39 @@ const Home: NextPage = () => {
               onClose={() => setPopupInfo(null)}
               closeOnMove={false}
             >
-              <div style={{zIndex:10}}>
-                <p style={{fontSize:"1rem",}}>{popupInfo.date}</p>
+              <div style={{ zIndex: 10 }}>
+                <p style={{ fontSize: "1rem" }}>{popupInfo.date}</p>
                 <h3>{popupInfo.title}</h3>
-                <p style={{fontSize:"1rem",}}>{popupInfo.description}</p>
-                <p style={{fontSize:"1rem", color:"#666"}}>{popupInfo.address}</p>
-                <p style={{fontSize:"1rem", color:"#666"}}>{popupInfo.category}</p>
-                <p style={{fontSize:"1rem", color:"#666"}}>0 attendees</p>
+                <p style={{ fontSize: "0.9rem" }}>{popupInfo.description}</p>
+                <p style={{ fontSize: "0.9rem", color: "#666" }}>
+                  {`Location: ${popupInfo.address}`}
+                  <br />
+                  {`Category: ${popupInfo.category}`}
+                </p>
+
+                {/* was thinking of not showing attendees for now, as clicking join button wont change the number.*/}
+                {/* <p style={{ fontSize: "1rem", color: "#666" }}>0 attendees</p> */}
+
+                <p
+                  onClick={() => {
+                    setSelectedHostInfo(popupInfo.host);
+                    setShowHostModal(true);
+                  }}
+                  style={{
+                    color: "#666",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                >
+                  {`Event hosted by ${popupInfo.host.name}`}
+                </p>
+
                 <Button>Join</Button>
+                <HostInfoModal
+                  hostInfo={selectedHostInfo}
+                  show={showHostModal}
+                  onHide={() => setShowHostModal(false)}
+                />
               </div>
             </Popup>
           )}
@@ -150,7 +193,14 @@ const Home: NextPage = () => {
 
         <Button
           variant="primary"
-          style={{  position:"fixed",left: "0",top:"0",marginTop:"25px",marginLeft:"8rem", zIndex: 2 }}
+          style={{
+            position: "fixed",
+            left: "0",
+            top: "0",
+            marginTop: "25px",
+            marginLeft: "8rem",
+            zIndex: 2,
+          }}
           onClick={() =>
             console.log(
               navigator.geolocation.getCurrentPosition((position) => {
@@ -220,8 +270,6 @@ const Home: NextPage = () => {
             <Profile />
           </Offcanvas.Body>
         </Offcanvas>
-
-
       </main>
     </div>
   );
