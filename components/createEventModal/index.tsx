@@ -7,6 +7,7 @@ import { supabase } from "../../utils/supabaseClient";
 import IEvent, { undefinedEvent } from "../../components/IEvent";
 import getEventType from "../../utils/getEventType";
 import getHostId from "../../utils/getHostId";
+import { definitions } from "../../types/supabase";
 
 const CreateEventModal = ({
   showModal,
@@ -35,24 +36,28 @@ const CreateEventModal = ({
       const host_id = await getHostId();
 
       // insert into the database
-      let { data, error, status } = await supabase.from("EVENT").insert({
-        event_name: event.title,
-        event_desc: event.description,
-        event_start_datetime: new Date(
-          event.date + " " + event.startTime
-        ).toISOString(),
-        event_end_datetime: new Date(
-          event.date + " " + event.endTime
-        ).toISOString(),
-        event_address: event.address,
-        event_postcode: event.postCode,
-        et_id: et_id,
-        event_host: host_id,
-      });
+      let { data, error, status } = await supabase
+        .from<definitions["EVENT"]>("EVENT")
+        .insert({
+          event_name: event.title,
+          event_desc: event.description,
+          event_start_datetime: new Date(
+            event.date + " " + event.startTime
+          ).toISOString(),
+          event_end_datetime: new Date(
+            event.date + " " + event.endTime
+          ).toISOString(),
+          event_address: event.address,
+          event_postcode: event.postCode,
+          et_id: et_id,
+          event_host: host_id,
+        });
 
       if (error) throw error;
 
       alert("Event created successfully!");
+
+      if (data) event.id = data[0]["event_id"];
     } catch (error: any) {
       alert(error.error_description || error.message);
     }

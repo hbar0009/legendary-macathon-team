@@ -5,6 +5,7 @@ export enum Category {
 }
 
 interface IEvent {
+  id?: number;
   title: string;
   category: Category;
   description: string;
@@ -12,8 +13,8 @@ interface IEvent {
   date: string;
   address: string;
   postCode: string;
-  startTime: string,
-  endTime: string,
+  startTime: string;
+  endTime: string;
 }
 
 export const undefinedEvent: IEvent = {
