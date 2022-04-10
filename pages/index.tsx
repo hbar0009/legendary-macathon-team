@@ -12,11 +12,17 @@ const Index: NextPage = () => {
     setSession(supabase.auth.session());
 
     supabase.auth.onAuthStateChange((_event, session) => {
+      // console.log("authData");
+      // console.log(_event);
+      // console.log(session?.user?.email);
+      // console.log(JSON.stringify(session));
       setSession(session);
     });
   }, []);
 
-  return <div>{!session ? <Auth /> : <Home />}</div>;
+  const useremail = String(session?.user?.email);
+
+  return <div>{!session ? <Auth /> : <Home username={useremail} />}</div>;
 };
 
 export default Index;
