@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { Modal } from "react-bootstrap";
-import IEvent, { undefinedEvent } from "../IEvent";
+
 import EventForm from "../createEventModal/EventForm";
+
+import { Button, Form, Modal, Col, Row } from "react-bootstrap";
+import { supabase } from "../../utils/supabaseClient";
+import IEvent, {undefinedEvent} from '../../components/IEvent';
+
 const CreateEventModal = ({
   showModal,
   setShowModal,
@@ -9,11 +13,69 @@ const CreateEventModal = ({
   showModal: boolean;
   setShowModal: Function;
 }) => {
-  // TODO: edit this function to send eventData to backend
-  const handleSubmit = (e: IEvent) => {
+
+  const handleSubmit = async (event: IEvent) => {
+   // setLoading(true);
+    setShowModal(false);
+    console.log("Submit button clicked, please pass the data to backend");
+
+    await createEvent(event);
+
+   // setLoading(false);
     setShowModal(false);
   };
 
+  async function createEvent(event: IEvent) {
+    try {
+      // retrieve event type information based on selected category
+      const et_id = await getEventType(event);
+
+      console.log(et_id);
+
+      // get user id of logged in user
+      const host_id = await getHostId();
+
+      console.log(host_id);
+
+      // insert into the database
+      let { data, error, status } = await supabase.from("EVENT").insert({
+        event_name: event.title,
+        event_desc: event.description,
+        event_start_datetime: new Date(event.date + " " + event.startTime).toISOString(),
+        event_end_datetime: new Date(event.date + " " + event.endTime).toISOString(),
+        event_address: event.address,
+        event_postcode: event.postCode,
+        et_id: et_id,
+        event_host: host_id,
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      alert(error.error_description || error.message);
+    }
+  }
+
+  async function getEventType(event: IEvent) {
+    const { data, error } = await supabase
+      .from("EVENT_TYPE")
+      .select("et_id")
+      .eq("et_name", event.category);
+
+    if (error) throw error;
+
+    return data[0]["et_id"];
+  }
+
+  async function getHostId() {
+    const { data, error } = await supabase
+      .from("PARTICIPANT")
+      .select("part_id")
+      .eq("part_email", supabase.auth.session()?.user?.email);
+
+    if (error) throw error;
+
+    return data[0]["part_id"];
+  }
 
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)}>
