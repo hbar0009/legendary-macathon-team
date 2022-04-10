@@ -136,17 +136,84 @@ async function GetMyEvents(setHostedEvents: Function) {
 
 
 function Profile({ action }: { action: (e: IEvent) => void }) {
-  const [currentEvents, setCurrentEvents] = useState<IEvent[]>();
-  const [hostedEvents, setHostedEvents] = useState<IEvent[]>();
-  const [pastEvents, setPastEvents] = useState<IEvent[]>();
+  //const [currentEvents, setCurrentEvents] = useState<IEvent[]>();
+ // const [hostedEvents, setHostedEvents] = useState<IEvent[]>();
+ // const [pastEvents, setPastEvents] = useState<IEvent[]>();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  
+  const currentEvents: IEvent[] = [
+    {...undefinedEvent,
+      title: "Aged care volunteering",
+      category: Category.Volunteering,
+      going: 8,
+    },
+    {...undefinedEvent,
+      title: "Food distribution volunteering",
+      category: Category.Volunteering,
+      going: 25,
+    },
+    { ...undefinedEvent,
+      title: "Anti-war rally", category: Category.Community, going: 652 },
+  ];
 
+  const pastEvents: IEvent[] = [
+    {...undefinedEvent,
+      title: "Elderly pickup",
+      category: Category.Volunteering,
+      description:"",
+      going: 10,
+    },
+    {...undefinedEvent,
+      title: "Gamer's meetup",
+      category: Category.Meetup,
+      description:"",
+      going: 7,
+    },
+    {...undefinedEvent,
+      title: "Street cleanup",
+      category: Category.Volunteering,
+      description:"",
+      going: 10,
+    },
+    { ...undefinedEvent, title: "Cycle meetup", category: Category.Meetup,  description:"", going: 22 },
+    {...undefinedEvent, title: "Anti-Lockdown rally", category: Category.Community,  description:"", going: 500 },
+  ];
+
+  const hostedEvents: IEvent[] = [
+    {...undefinedEvent,
+      title: "Poverty fundraiser",
+      category: Category.Volunteering,
+      description:"",
+      going: 15,
+    },
+    {...undefinedEvent,
+      title: "Donation distribution",
+      category: Category.Volunteering,
+      description:"",
+      going: 7,
+    },
+    {...undefinedEvent,
+      title: "Red cross",
+      category: Category.Volunteering,
+      description:"",
+      going: 5,
+    },
+    { ...undefinedEvent, title: "Cycle meetup", category: Category.Meetup,  description:"", going: 22 },
+    {...undefinedEvent, title: "Anti-Lockdown rally", category: Category.Community,  description:"", going: 500 },
+    {...undefinedEvent,
+      title: "Gamers meetup",
+      category: Category.Meetup,
+      description:"",
+      going: 17,
+
+    }
+  ];
 
   useEffect(() => {
-    GetCurrentEvents(setCurrentEvents,setPastEvents);
+   // GetCurrentEvents(setCurrentEvents,setPastEvents);
     SetUserDetails(setName,setEmail );
-    GetMyEvents(setHostedEvents);
+   // GetMyEvents(setHostedEvents);
   }, []);
   
 
