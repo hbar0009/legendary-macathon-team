@@ -15,14 +15,16 @@ const CreateEventModal = ({
   setShowModal: Function;
 }) => {
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (event: IEvent) => {
-   // setLoading(true);
+   setLoading(true);
     setShowModal(false);
     console.log("Submit button clicked, please pass the data to backend");
 
     await createEvent(event);
 
-   // setLoading(false);
+    setLoading(false);
     setShowModal(false);
   };
 
@@ -86,6 +88,7 @@ const CreateEventModal = ({
 
       <Modal.Body>
         <EventForm
+          loading = {loading}
           passedEvent={undefinedEvent}
           handleButton={handleSubmit}
           buttonText={"Submit"}

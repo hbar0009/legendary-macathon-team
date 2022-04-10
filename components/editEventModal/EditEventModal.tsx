@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Modal } from "react-bootstrap";
 import IEvent from "../IEvent";
 import EventForm from "../createEventModal/EventForm";
@@ -11,6 +11,7 @@ const EditEventModal = ({
   setShowModal: Function;
   event: IEvent ;
 }) => {
+  const [loading, setLoading] = useState(false);
 
   const handleSave = (e: IEvent) => {
     setShowModal(false);
@@ -24,6 +25,7 @@ const EditEventModal = ({
 
       <Modal.Body>
         <EventForm
+         loading = {loading}
           passedEvent={event}
           handleButton={handleSave}
           buttonText={"Save"}
