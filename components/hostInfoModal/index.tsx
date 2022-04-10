@@ -1,6 +1,8 @@
 import React from "react";
-import { Button, Modal, ModalProps } from "react-bootstrap";
+import { Col, Modal, ModalProps, Row } from "react-bootstrap";
 import { Omit, BsPrefixProps } from "react-bootstrap/esm/helpers";
+import orgImgPlaceholder from "./organisation_placeholder.jpg";
+import Image from "next/image";
 
 const HostInfoModal = (
   props: JSX.IntrinsicAttributes &
@@ -32,16 +34,25 @@ const HostInfoModal = (
     >
       <Modal.Header closeButton />
       <Modal.Body>
-        <h4>{props.hostInfo.name}</h4>
-        <p>
-          Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-          dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-          consectetur ac, vestibulum at eros.
+        <br />
+        <Image
+          src={orgImgPlaceholder}
+          alt="Place holder of event host picture"
+          width={100}
+          height={100}
+        />
+        <h2>{props.hostInfo.name}</h2>
+        <br />
+        <p style={{ fontSize: "0.9rem", color: "#666" }}>
+          {`Address: ${props.hostInfo.address}`}
+          <br />
+          {`Phone Numbner: ${props.hostInfo.phone}`}
+          <br />
+          {`Website: ${props.hostInfo.website}`}
+          <br />
+          {`Description: ${props.hostInfo.description}`}
         </p>
       </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={props.onHide}>Close</Button>
-      </Modal.Footer>
     </Modal>
   );
 };
