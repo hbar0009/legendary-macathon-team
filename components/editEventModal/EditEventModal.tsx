@@ -19,7 +19,7 @@ const EditEventModal = ({
   return (
     <Modal show={showModal} onHide={() => setShowModal(false)}>
       <Modal.Header closeButton>
-        <Modal.Title>"Edit Event"</Modal.Title>
+        <Modal.Title>Edit Event</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
