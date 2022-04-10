@@ -19,8 +19,6 @@ const CreateEventModal = ({
 
   const handleSubmit = async (event: IEvent) => {
     setLoading(true);
-    setShowModal(false);
-    console.log("Submit button clicked, please pass the data to backend");
 
     await createEvent(event);
 
@@ -33,12 +31,8 @@ const CreateEventModal = ({
       // retrieve event type information based on selected category
       const et_id = await getEventType(event);
 
-      console.log(et_id);
-
       // get user id of logged in user
       const host_id = await getHostId();
-
-      console.log(host_id);
 
       // insert into the database
       let { data, error, status } = await supabase.from("EVENT").insert({
